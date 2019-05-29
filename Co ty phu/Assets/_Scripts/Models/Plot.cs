@@ -34,4 +34,16 @@ public class Plot : MonoBehaviour
     {
         Color = EPlotColor.GREEN;
     }
+    public float SIZE
+    {
+        get
+        {
+          return  GetComponent<Renderer>().bounds.size.x;
+        }
+    }
+
+    public void SetPosition(Vector3 basePosition, int i, int j)
+    {
+        this.transform.position = new Vector3(i * SIZE, j* SIZE);
+    }
 }
