@@ -4,7 +4,12 @@ using UnityEngine;
 
 public class Map : MonoBehaviour
 {
+    private void Start()
+    {
+        Init();
+    }
     public GameObject plotPrefap;
+    public GameObject bigPlotPrefap;
    
 
     public Vector3 basePosition;
@@ -17,15 +22,30 @@ public class Map : MonoBehaviour
     [ContextMenu("check")]
     public void check()
     {
-        Init();
+        Start();
     }
     public void Init()
     {
         _plots = new Plot[32];
         for (int i =0; i< 32; i++)
         {
-            GameObject c = GameObject.Instantiate(plotPrefap,CanculatePosition(i) , Quaternion.identity) as GameObject ;
-            _plots[i] = c.GetComponent<Plot>();
+            GameObject c = null;
+            if (i % 8 == 0) {
+                c = GameObject.Instantiate(bigPlotPrefap, CanculatePosition(i), Quaternion.identity) as GameObject;
+            }
+            else
+            {
+                c = GameObject.Instantiate(plotPrefap, CanculatePosition(i), Quaternion.identity) as GameObject;
+            }
+            c.transform.parent = this.transform;
+           
+            //_plots[i].count = 1;
+           
+            
+            
+          
+            
+           
         }
     }
 
@@ -38,17 +58,35 @@ public class Map : MonoBehaviour
         Vector3 base4 = new Vector3(basePosition.x + 8 * SIZE, 0, basePosition.z );
         if (i < 8)
         {
+            if (i == 0)
+            {
+                return new Vector3(base1.x - 0.5f, base1.y, base1.z - 0.5f);
+            }
             return new Vector3(base1.x, base1.y, base1.z + i * SIZE);
         }
         else if (i < 16)
         {
+            if (i == 8)
+            {
+                return new Vector3(base2.x - 0.5f, base2.y, base2.z + 0.5f);
+            }
             return new Vector3(base2.x + (i % 8) * SIZE, base2.y, base2.z);
         }
         else if (i < 24)
         {
-            return new Vector3(base3.x , base2.y, base3.z  - (i % 8) * SIZE);
+            if (i == 16)
+            {
+                return new Vector3(base3.x + 0.5f, base3.y, base3.z + 0.5f);
+            }
+            return new Vector3(base3.x, base3.y, base3.z - (i % 8) * SIZE);
         }
-        else 
-            return new Vector3(base4.x - (i % 8) * SIZE, base4.y, base4.z );
+        else
+        {
+            if (i == 24)
+            {
+                return new Vector3(base4.x + 0.5f, base4.y, base4.z - 0.5f);
+            }
+            return new Vector3(base4.x - (i % 8) * SIZE, base4.y, base4.z);
+        }
     }
 }
