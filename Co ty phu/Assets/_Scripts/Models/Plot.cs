@@ -21,6 +21,7 @@ public class Plot : MonoBehaviour
                     GetComponent<Renderer>().material = ResourcesCTL.Instance.GreenPlotMaterial;
                     break;
                 case EPlotColor.BLUE:
+                    GetComponent<Renderer>().material = ResourcesCTL.Instance.BluePlotMaterial;
                     break;
                 case EPlotColor.YELLOW:
                     break;

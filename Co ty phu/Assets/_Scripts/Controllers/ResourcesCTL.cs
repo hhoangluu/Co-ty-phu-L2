@@ -40,6 +40,19 @@ public class ResourcesCTL
             return _greenPlotMaterial;
         }
     }
-    #endregion 
     
+    private Material _bluePlotMaterial;
+    public Material BluePlotMaterial
+    {
+        get
+        {
+            if (_bluePlotMaterial == null)
+            {
+                _bluePlotMaterial = Resources.Load<Material>("Materials/BluePlot");//load material
+            }
+            return _bluePlotMaterial;
+        }
+    }
+    #endregion
+
 }

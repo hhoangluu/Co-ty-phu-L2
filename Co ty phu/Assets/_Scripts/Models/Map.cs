@@ -37,8 +37,19 @@ public class Map : MonoBehaviour
             {
                 c = GameObject.Instantiate(plotPrefap, CanculatePosition(i), Quaternion.identity) as GameObject;
             }
-            c.transform.parent = this.transform;
-           
+            c.transform.parent = this.transform.GetChild(0);
+
+            _plots[i] = c.GetComponent<Plot>();
+
+            // set color for plot
+            if (i % 3 == 0 )
+            {
+                _plots[i].Color = EPlotColor.BLUE;
+            } 
+            if ( i % 4 == 0)
+            {
+                _plots[i].Color = EPlotColor.RED;
+            }
             //_plots[i].count = 1;
            
             
