@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Plot_big : MonoBehaviour
+public class Plot_big : Plot
 {
-    // Start is called before the first frame update
-    void Start()
+    public int Count
     {
-        
+        get { return Count; }
+        set { Count = value; }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Hello()
     {
-        
+
     }
+   
 }
