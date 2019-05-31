@@ -10,8 +10,13 @@ PrefabInstance:
     - target: {fileID: -927199367670048503, guid: bc913670c0d9ad848b079fb114d2489b,
         type: 3}
       propertyPath: m_Name
-      value: 29-Castle-Blue
+      value: 29-Castle-Blue Variant
       objectReference: {fileID: 0}
+    - target: {fileID: -7751858809142426425, guid: bc913670c0d9ad848b079fb114d2489b,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: a0bb9ae74c99c16429e24f42cdb94529, type: 2}
     - target: {fileID: -4216859302048453862, guid: bc913670c0d9ad848b079fb114d2489b,
         type: 3}
       propertyPath: m_LocalPosition.x
