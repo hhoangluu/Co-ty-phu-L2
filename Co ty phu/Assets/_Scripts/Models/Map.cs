@@ -29,6 +29,7 @@ public class Map : MonoBehaviour
         _plots = new Plot[32];
         for (int i =0; i< 32; i++)
         {
+            
             GameObject c = null;
             if (i % 8 == 0) {
                 c = GameObject.Instantiate(bigPlotPrefap, CanculatePosition(i), Quaternion.identity) as GameObject;
