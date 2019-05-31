@@ -53,6 +53,31 @@ public class ResourcesCTL
             return _bluePlotMaterial;
         }
     }
+
+    private Material _yellowPlotMaterial;
+    public Material YellowPlotMaterial
+    {
+        get
+        {
+            if (_yellowPlotMaterial == null)
+            {
+                _yellowPlotMaterial = Resources.Load<Material>("Materials/YellowPlot");//load material
+            }
+            return _yellowPlotMaterial;
+        }
+    }
+    private Material _violetPlotMaterial;
+    public Material VioletPlotMaterial
+    {
+        get
+        {
+            if (_violetPlotMaterial == null)
+            {
+                _violetPlotMaterial = Resources.Load<Material>("Materials/VioletPlot");//load material
+            }
+            return _violetPlotMaterial;
+        }
+    }
     #endregion
 
 }

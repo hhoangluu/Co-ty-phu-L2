@@ -4,5 +4,5 @@ using UnityEngine;
 
 public enum EPlotColor
 {
-    RED, GREEN, BLUE, YELLOW
+    RED, GREEN, BLUE, YELLOW, PINK, LIGHTBLUE, ORANGE, VIOLET,WHITE
 }

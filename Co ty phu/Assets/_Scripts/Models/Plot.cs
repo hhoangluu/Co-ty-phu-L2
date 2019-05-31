@@ -24,9 +24,12 @@ public class Plot : MonoBehaviour
                     GetComponent<Renderer>().material = ResourcesCTL.Instance.BluePlotMaterial;
                     break;
                 case EPlotColor.YELLOW:
+                    GetComponent<Renderer>().material = ResourcesCTL.Instance.YellowPlotMaterial;
                     break;
-                default:
+                case EPlotColor.VIOLET:
+                    GetComponent<Renderer>().material = ResourcesCTL.Instance.VioletPlotMaterial;
                     break;
+                  
             }
         }
     }
@@ -35,16 +38,20 @@ public class Plot : MonoBehaviour
     {
         Color = EPlotColor.GREEN;
     }
-    public float SIZE
+    public float SIZEX
     {
         get
         {
           return  GetComponent<Renderer>().bounds.size.x;
         }
     }
-
-    public void SetPosition(Vector3 basePosition, int i, int j)
+    public float SIZEBig
     {
-        this.transform.position = new Vector3(i * SIZE, j* SIZE);
+        get
+        {
+            return GetComponent<Renderer>().bounds.size.x;
+        }
     }
+
+   
 }
