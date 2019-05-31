@@ -3,7 +3,42 @@ guid: 8154414df283ebc4da7dc265ce7bf53c
 ModelImporter:
   serializedVersion: 25
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Cabin_default4Mat
+    second: {fileID: -6558329902326657091, guid: 0e026fce09101fb48a441e26ddd8f15a,
+      type: 3}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Cabin_default5Mat
+    second: {fileID: -2851603609170505692, guid: 0e026fce09101fb48a441e26ddd8f15a,
+      type: 3}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Cabin_default7Mat
+    second: {fileID: 2997261290831365653, guid: 0e026fce09101fb48a441e26ddd8f15a,
+      type: 3}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Chimney_default3Mat
+    second: {fileID: 8893204376746610718, guid: 0e026fce09101fb48a441e26ddd8f15a,
+      type: 3}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Door_default2Mat
+    second: {fileID: 2916058450537561257, guid: 259af2809f2339241b4c5630615f86ab,
+      type: 3}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Roof_default6Mat
+    second: {fileID: 2100000, guid: a0bb9ae74c99c16429e24f42cdb94529, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

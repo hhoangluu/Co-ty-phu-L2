@@ -3,7 +3,37 @@ guid: 77b99f5ebf8cf0248a4490bf9677494a
 ModelImporter:
   serializedVersion: 25
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Tower_Boole_Tubo_2Mat
+    second: {fileID: 2100000, guid: a0bb9ae74c99c16429e24f42cdb94529, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Tower_Boole_ghost_CuboMat
+    second: {fileID: 2100000, guid: 0462a989ca238ce47a2f9cb005008b01, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Tower_CilindroMat
+    second: {fileID: 2100000, guid: a0bb9ae74c99c16429e24f42cdb94529, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Tower_Cilindro_1Mat
+    second: {fileID: 2100000, guid: 0462a989ca238ce47a2f9cb005008b01, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Tower_TubeMat
+    second: {fileID: 2100000, guid: 0462a989ca238ce47a2f9cb005008b01, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Tower_Tubo_1Mat
+    second: {fileID: 2100000, guid: 0462a989ca238ce47a2f9cb005008b01, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

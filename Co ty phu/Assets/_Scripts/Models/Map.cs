@@ -32,8 +32,6 @@ public class Map : MonoBehaviour
             GameObject c = null;
             if (i % 8 == 0) {
                 c = GameObject.Instantiate(bigPlotPrefap, CanculatePosition(i), Quaternion.identity) as GameObject;
-                GameObject b = GameObject.Instantiate(Resources.Load<GameObject>("Items/1-Wonders-Blue")) as GameObject;
-                b.transform.parent = this.transform.GetChild(1);
             }
             else
             {
