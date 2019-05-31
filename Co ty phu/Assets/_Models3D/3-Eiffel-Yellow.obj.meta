@@ -3,12 +3,7 @@ guid: 4f2fedee6784f2d4bb986392aadadb91
 ModelImporter:
   serializedVersion: 25
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: 10067_Eiffel_Tower_v1Mat
-    second: {fileID: 2100000, guid: 063b13654694d0b449454d1dc003d6d8, type: 2}
+  externalObjects: {}
   materials:
     importMaterials: 1
     materialName: 0

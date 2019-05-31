@@ -3,27 +3,7 @@ guid: bc913670c0d9ad848b079fb114d2489b
 ModelImporter:
   serializedVersion: 25
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Castle_ExteriorMat
-    second: {fileID: 2100000, guid: a0bb9ae74c99c16429e24f42cdb94529, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Castle_InteriorMat
-    second: {fileID: 2100000, guid: 0462a989ca238ce47a2f9cb005008b01, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Ground_and_FountainMat
-    second: {fileID: 2100000, guid: a0bb9ae74c99c16429e24f42cdb94529, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Towers_Doors_and_WindowsMat
-    second: {fileID: 2100000, guid: a0bb9ae74c99c16429e24f42cdb94529, type: 2}
+  externalObjects: {}
   materials:
     importMaterials: 1
     materialName: 0
