@@ -2,16 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Item1 : BaseItem
 {
-    private EPlayer _player;
-
-    private int _money;
-
-    private int Card;
-
-    private int _position;
-
     // Start is called before the first frame update
     void Start()
     {
