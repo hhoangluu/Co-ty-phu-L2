@@ -10,7 +10,7 @@ PrefabInstance:
     - target: {fileID: -927199367670048503, guid: 004c2650913eef142b93dfb0734d2139,
         type: 3}
       propertyPath: m_Name
-      value: Wonders-Blue
+      value: 1-Wonders-Blue Variant
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 004c2650913eef142b93dfb0734d2139,
         type: 3}
@@ -20,7 +20,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: 004c2650913eef142b93dfb0734d2139,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.8
+      value: 2.8
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 004c2650913eef142b93dfb0734d2139,
         type: 3}

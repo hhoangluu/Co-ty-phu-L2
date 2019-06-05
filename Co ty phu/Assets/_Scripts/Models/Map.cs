@@ -12,15 +12,15 @@ public class Map : MonoBehaviour
     public GameObject plotHorizontalPrefap;
 
     public GameObject bigPlotPrefap;
-    
+
 
 
     public Vector3 basePosition;
-    private Plot[] _plots; 
+    private Plot[] _plots;
     public Plot[] Plots
     {
         get { return _plots; }
-        
+
     }
     [ContextMenu("check")]
     public void check()
@@ -30,14 +30,14 @@ public class Map : MonoBehaviour
     public void Init()
     {
         _plots = new Plot[32];
-        for (int i =0; i< 32; i++)
+        for (int i = 0; i < 32; i++)
         {
-            
+
             GameObject c = null;
             if (i % 8 == 0)
             {
                 c = GameObject.Instantiate(bigPlotPrefap, CanculatePosition(i), Quaternion.identity) as GameObject;
-              
+
             }
             else if ((i > 8 && i < 16) || (i < 32 && i > 24))
             {
@@ -54,39 +54,42 @@ public class Map : MonoBehaviour
             _plots[i] = c.GetComponent<Plot>();
 
             // set color for plot
-            if (i == 0 || i == 3)
+            if (i == 1 || i == 3)
             {
-                _plots[i].Color = EPlotColor.GREEN;
+                _plots[i].Color = EPlotColor.COLOR1;
             }
             else if (i == 5 || i == 6 || i == 7)
             {
-                _plots[i].Color = EPlotColor.RED;
+                _plots[i].Color = EPlotColor.COLOR2;
             }
             else if (i == 10 || i == 11)
             {
-                _plots[i].Color = EPlotColor.VIOLET;
+                _plots[i].Color = EPlotColor.COLOR3;
             }
             else if (i == 13 || i == 15)
             {
-                _plots[i].Color = EPlotColor.RED;
+                _plots[i].Color = EPlotColor.COLOR4;
             }
             else if (i == 17 || i == 19)
             {
-                _plots[i].Color = EPlotColor.GREEN;
+                _plots[i].Color = EPlotColor.COLOR5;
             }
             else if (i == 21 || i == 22 || i == 23)
             {
-                _plots[i].Color = EPlotColor.VIOLET;
+                _plots[i].Color = EPlotColor.COLOR6;
             }
             else if (i == 26 || i == 27)
             {
-                _plots[i].Color = EPlotColor.YELLOW;
+                _plots[i].Color = EPlotColor.COLOR7;
             }
             else if (i == 29 || i == 31)
             {
-                _plots[i].Color = EPlotColor.VIOLET;
+                _plots[i].Color = EPlotColor.COLOR8;
             }
-
+            else
+            {
+                _plots[i].Color = EPlotColor.WHITE;
+            }
             //_plots[i].count = 1;
 
 
@@ -100,27 +103,28 @@ public class Map : MonoBehaviour
     public Vector3 CanculatePosition(int i)
     {
         float SIZE = plotHorizontalPrefap.GetComponent<Plot>().SIZEX;
-        float SIZEY = bigPlotPrefap.GetComponent<Plot>().SIZEBig;
+        float SIZEY = plotHorizontalPrefap.GetComponent<Plot>().SIZEY;
+        float SIZEBig = bigPlotPrefap.GetComponent<Plot>().SIZEBig;
 
         //Debug.Log(SIZE);
-        Vector3 base1 = new Vector3(basePosition.x, 0, basePosition.z);
-        Vector3 base2 = new Vector3(basePosition.x , 0, basePosition.z + 8 * SIZE);
-        Vector3 base3 = new Vector3(basePosition.x + 8*SIZE, 0, basePosition.z + 8 * SIZE);
-        Vector3 base4 = new Vector3(basePosition.x + 8 * SIZE, 0, basePosition.z );
+        Vector3 base1 = new Vector3(basePosition.x, SIZEY, basePosition.z);
+        Vector3 base2 = new Vector3(basePosition.x, SIZEY, basePosition.z + 8 * SIZE);
+        Vector3 base3 = new Vector3(basePosition.x + 8 * SIZE, SIZEY, basePosition.z + 8 * SIZE);
+        Vector3 base4 = new Vector3(basePosition.x + 8 * SIZE, SIZEY, basePosition.z);
         if (i < 8)
         {
             if (i == 0)
             {
-                return new Vector3(-3.5f * SIZE - 0.5f * SIZEY, base1.y, -3.5f * SIZE - 0.5f * SIZEY);
+                return new Vector3(-3.5f * SIZE - 0.5f * SIZEBig, base1.y, -3.5f * SIZE - 0.5f * SIZEBig);
             }
             //return new Vector3(base1.x -  0.5f*SIZEY, base1.y, base1.z + i * SIZE);
-            return new Vector3(-4.5f*SIZE, base1.y, base1.z + i * SIZE);
+            return new Vector3(-4.5f * SIZE, base1.y, base1.z + i * SIZE);
         }
         else if (i < 16)
         {
             if (i == 8)
             {
-                return new Vector3(-3.5f * SIZE - 0.5f * SIZEY, base2.y, 3.5f * SIZE + 0.5f * SIZEY);
+                return new Vector3(-3.5f * SIZE - 0.5f * SIZEBig, base2.y, 3.5f * SIZE + 0.5f * SIZEBig);
             }
             return new Vector3(base2.x + (i % 8) * SIZE, base2.y, 4.5f * SIZE);
         }
@@ -128,7 +132,7 @@ public class Map : MonoBehaviour
         {
             if (i == 16)
             {
-                return new Vector3(3.5f * SIZE + 0.5f * SIZEY, base3.y, 3.5f * SIZE + 0.5f * SIZEY);
+                return new Vector3(3.5f * SIZE + 0.5f * SIZEBig, base3.y, 3.5f * SIZE + 0.5f * SIZEBig);
             }
             return new Vector3(4.5f * SIZE, base3.y, base3.z - (i % 8) * SIZE);
         }
@@ -136,7 +140,7 @@ public class Map : MonoBehaviour
         {
             if (i == 24)
             {
-                return new Vector3(3.5f * SIZE + 0.5f * SIZEY, base4.y, -3.5f * SIZE - 0.5f * SIZEY);
+                return new Vector3(3.5f * SIZE + 0.5f * SIZEBig, base4.y, -3.5f * SIZE - 0.5f * SIZEBig);
             }
             return new Vector3(base4.x - (i % 8) * SIZE, base4.y, -4.5f * SIZE);
         }

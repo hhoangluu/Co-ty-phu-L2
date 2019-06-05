@@ -10,7 +10,7 @@ PrefabInstance:
     - target: {fileID: -927199367670048503, guid: f9126b0d264c7ae429cfb0b7a4ad0545,
         type: 3}
       propertyPath: m_Name
-      value: 5-Neuschwanstein-Blue
+      value: 5-Neuschwanstein-Blue Variant
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: f9126b0d264c7ae429cfb0b7a4ad0545,
         type: 3}
@@ -20,7 +20,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: f9126b0d264c7ae429cfb0b7a4ad0545,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: f9126b0d264c7ae429cfb0b7a4ad0545,
         type: 3}
