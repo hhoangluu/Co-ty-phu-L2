@@ -14,8 +14,11 @@ public class Plot : MonoBehaviour
 
             switch (_color)
             {
-                case EPlotColor.RED:
-                    GetComponent<Renderer>().material = ResourcesCTL.Instance.RedPlotMaterial;
+                case EPlotColor.WHITE:
+                    GetComponent<Renderer>().material = ResourcesCTL.Instance.WhitePlotMaterial;
+                    break;
+                case EPlotColor.VIOLET:
+                    GetComponent< Renderer > ().material = ResourcesCTL.Instance.VioletPlotMaterial;
                     break;
                 case EPlotColor.GREEN:
                     GetComponent<Renderer>().material = ResourcesCTL.Instance.GreenPlotMaterial;
@@ -26,10 +29,31 @@ public class Plot : MonoBehaviour
                 case EPlotColor.YELLOW:
                     GetComponent<Renderer>().material = ResourcesCTL.Instance.YellowPlotMaterial;
                     break;
-                case EPlotColor.VIOLET:
-                    GetComponent<Renderer>().material = ResourcesCTL.Instance.VioletPlotMaterial;
+                case EPlotColor.COLOR1:
+                    GetComponent<Renderer>().material = ResourcesCTL.Instance.Color1;
                     break;
-                  
+                case EPlotColor.COLOR2:
+                    GetComponent<Renderer>().material = ResourcesCTL.Instance.Color2;
+                    break;
+                case EPlotColor.COLOR3:
+                    GetComponent<Renderer>().material = ResourcesCTL.Instance.Color3;
+                    break;
+                case EPlotColor.COLOR4:
+                    GetComponent<Renderer>().material = ResourcesCTL.Instance.Color4;
+                    break;
+                case EPlotColor.COLOR5:
+                    GetComponent<Renderer>().material = ResourcesCTL.Instance.Color5;
+                    break;
+                case EPlotColor.COLOR6:
+                    GetComponent<Renderer>().material = ResourcesCTL.Instance.Color6;
+                    break;
+                case EPlotColor.COLOR7:
+                    GetComponent<Renderer>().material = ResourcesCTL.Instance.Color7;
+                    break;
+                case EPlotColor.COLOR8:
+                    GetComponent<Renderer>().material = ResourcesCTL.Instance.Color8;
+                    break;
+
             }
         }
     }
@@ -52,6 +76,12 @@ public class Plot : MonoBehaviour
             return GetComponent<Renderer>().bounds.size.x;
         }
     }
+    public float SIZEY
+    {
+        get
+        {
+            return GetComponent<Renderer>().bounds.size.y;
+        }
+    }
 
-   
 }
