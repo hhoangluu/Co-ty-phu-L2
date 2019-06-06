@@ -8,13 +8,39 @@ public class Map : MonoBehaviour
     {
         Init();
     }
+    public static Map Current;
     public GameObject plotVerticalPrefap;
     public GameObject plotHorizontalPrefap;
 
     public GameObject bigPlotPrefap;
+    private float plot_size = -1;
+    public float PlotSize
+    {
+        get
+        {
+            if (plot_size < 0)
+                plot_size = plotVerticalPrefap.GetComponent<Plot>().SIZEY;
+            return plot_size;
+        }
+    }
 
+    private float left_margin = -1;
+    public float LeftMargin
+    {
+        get
+        {
+            if (left_margin < 0)
+                left_margin = -4.5f * plotVerticalPrefap.GetComponent<Plot>().SIZEY;
+            return left_margin;
+        }
+    }
 
-
+   
+    private List<BaseItem> items;
+    void Awake()
+    {
+        Current = this;
+    }
     public Vector3 basePosition;
     private Plot[] _plots;
     public Plot[] Plots
@@ -23,9 +49,19 @@ public class Map : MonoBehaviour
 
     }
     [ContextMenu("check")]
-    public void check()
+    public void Check()
     {
         Start();
+    }
+    [ContextMenu("InitBuilding1-1")]
+    public void InitBuilding1Plot1()
+    {
+        items = new List<BaseItem>();
+        GameObject Building1 = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Items/Building1-Blue"));
+        Building1.transform.parent = this.transform.GetChild(1);
+        Building b1 = Building1.GetComponent<Building>();
+        items.Add(b1);
+        b1.SetLocationById(1);
     }
     public void Init()
     {
@@ -107,10 +143,10 @@ public class Map : MonoBehaviour
         float SIZEBig = bigPlotPrefap.GetComponent<Plot>().SIZEBig;
 
         //Debug.Log(SIZE);
-        Vector3 base1 = new Vector3(basePosition.x, SIZEY, basePosition.z);
-        Vector3 base2 = new Vector3(basePosition.x, SIZEY, basePosition.z + 8 * SIZE);
-        Vector3 base3 = new Vector3(basePosition.x + 8 * SIZE, SIZEY, basePosition.z + 8 * SIZE);
-        Vector3 base4 = new Vector3(basePosition.x + 8 * SIZE, SIZEY, basePosition.z);
+        Vector3 base1 = new Vector3(basePosition.x, 0, basePosition.z);
+        Vector3 base2 = new Vector3(basePosition.x, 0, basePosition.z + 8 * SIZE);
+        Vector3 base3 = new Vector3(basePosition.x + 8 * SIZE, 0, basePosition.z + 8 * SIZE);
+        Vector3 base4 = new Vector3(basePosition.x + 8 * SIZE, 0, basePosition.z);
         if (i < 8)
         {
             if (i == 0)
@@ -145,4 +181,6 @@ public class Map : MonoBehaviour
             return new Vector3(base4.x - (i % 8) * SIZE, base4.y, -4.5f * SIZE);
         }
     }
+
+    
 }

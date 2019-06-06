@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class Building : BaseItem
 {
+    public int Level { get; set; }
+    public int Fees { get; set; }
+    public int Price { get; set; }
+    public string Cityname { get; set; }
+    public EPlayer Owner { get; set; }
 
-    // Start is called before the first frame update
-    void Start()
+    private void Init()
     {
-        
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
         
     }
