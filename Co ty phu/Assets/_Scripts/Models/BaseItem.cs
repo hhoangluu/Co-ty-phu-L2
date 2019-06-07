@@ -22,7 +22,7 @@ public class BaseItem : MonoBehaviour
     {
         Location = new Vector2();
         this.transform.position = new Vector3(Map.Current.BotLeftMargin, this.transform.position.y, Map.Current.BotLeftMargin + id * Map.Current.PlotSize + 0.5f * Map.Current.PlotSize); // vì mảnh đất dọc dài hơn ngang 2 lần
-        Debug.Log("position"+ this.transform.position);
+        //Debug.Log("position"+ this.transform.position);
     }
 
     
