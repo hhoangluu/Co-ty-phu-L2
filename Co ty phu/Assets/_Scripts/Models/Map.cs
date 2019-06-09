@@ -1,18 +1,17 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Map : MonoBehaviour
 {
-    private void Start()
-    {
-        Init();
-    }
+    
     public static Map Current;
     public GameObject plotVerticalPrefap;
     public GameObject plotHorizontalPrefap;
-
     public GameObject bigPlotPrefap;
+    public GameObject Deal;
+
     private float plot_size = -1;
     public float PlotSize
     {
@@ -35,7 +34,16 @@ public class Map : MonoBehaviour
         }
     }
 
-   
+    private float topright_margin = -1;
+    public float TopRightMargin
+    {
+        get
+        {
+            if (topright_margin < 0)
+                topright_margin = 4.5f * plotHorizontalPrefap.GetComponent<Plot>().SIZEX;
+            return topright_margin;
+        }
+    }
 
 
     private List<BaseItem> items;
@@ -53,20 +61,22 @@ public class Map : MonoBehaviour
     [ContextMenu("check")]
     public void Check()
     {
-        Start();
+        Init();
     }
-    [ContextMenu("InitBuilding1-1")]
-    public void InitBuilding1()
+    //[ContextMenu("InitBuilding1-1")]
+    public void InitBuilding1(int id)
     {
         items = new List<BaseItem>();
-        GameObject Building1 = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Items/Building1-Blue")) as GameObject;
+        GameObject Building1 = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Items/22-Red-PisaTower")) as GameObject;
         Building1.transform.parent = this.transform.GetChild(1);
         Building b1 = Building1.GetComponent<Building>();
         items.Add(b1);
-        b1.SetLocationById(2);
-
+        b1.SetBuildingLocationById(id);
+        
         
     }
+
+
     public void Init()
     {
         _plots = new Plot[32];
@@ -90,9 +100,10 @@ public class Map : MonoBehaviour
 
 
             c.transform.parent = this.transform.GetChild(0);
-
+            c.GetComponent<Collider>().tag = "Plot";
             _plots[i] = c.GetComponent<Plot>();
-
+            _plots[i].name = "plot " + i;
+            
             // set color for plot
             if (i == 1 || i == 3)
             {
@@ -140,6 +151,8 @@ public class Map : MonoBehaviour
         }
     }
 
+   
+
     public Vector3 CanculatePosition(int i)
     {
         float SIZE = plotHorizontalPrefap.GetComponent<Plot>().SIZEX;
@@ -186,5 +199,13 @@ public class Map : MonoBehaviour
         }
     }
 
-    
+    public void ShowDeal()
+    {
+        Deal.active = true;
+    }
+
+    public void hideDeal()
+    {
+        Deal.active = false;
+    }
 }

@@ -33,7 +33,7 @@ public class SingleDice : MonoBehaviour
     public bool IsPourDone()
     {
         if (rb.IsSleeping() && hasLanded && pour)
-        {
+        { 
             return true;
         }
      //   Debug.Log(name + " " + rb.IsSleeping() + " " + hasLanded + " " + pour);
@@ -46,6 +46,7 @@ public class SingleDice : MonoBehaviour
       //  Debug.Log(name + "  " + rb.IsSleeping());
         if (rb.IsSleeping() && !hasLanded && pour)
         {
+            
             hasLanded = true;
             rb.useGravity = false;
             rb.isKinematic = true;
@@ -115,7 +116,9 @@ public class SingleDice : MonoBehaviour
             {
                 
                 Point = side.SideValue;
-               // Debug.Log(Point);
+                // pour = false;
+                
+                // Debug.Log(Point);
             }
         }
     }

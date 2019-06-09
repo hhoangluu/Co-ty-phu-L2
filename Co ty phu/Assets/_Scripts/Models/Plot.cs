@@ -84,4 +84,24 @@ public class Plot : MonoBehaviour
         }
     }
 
+    private bool underPlayer;
+    public bool UnderPlayer { get => underPlayer; set => underPlayer = value; }
+
+
+
+    private void OnTriggerStay(Collider col)
+    {
+        if (col.tag == "Player")
+        {
+            underPlayer = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider col)
+    {
+        if (col.tag == "Player")
+        {
+            underPlayer = false;
+        }
+    }
 }

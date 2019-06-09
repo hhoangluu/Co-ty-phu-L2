@@ -24,23 +24,8 @@ public class DiceModel: MonoBehaviour
     }
     public void PourDice()
     {
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            if (!dice1.Pour && !dice2.Pour)
-            {
-
-                dice1.PourDice();
-                dice2.PourDice();
-            }
-            if (dice1.Pour && dice2.Pour)
-            {
-
-                dice1.PourDiceAgain();
-                dice2.PourDiceAgain();
-            }
-
-        }
+        dice1.PourDiceAgain();
+        dice2.PourDiceAgain();
     }
     public void DiceUpdate()
     {
@@ -49,6 +34,17 @@ public class DiceModel: MonoBehaviour
         if (dice1.IsPourDone() && dice2.IsPourDone())
         {
             Point = dice1.Point + dice2.Point;
+            
+        }
+    }
+
+    public void EndTurn()
+    {
+        if (dice1.IsPourDone() && dice2.IsPourDone())
+        {
+           dice1.Pour=  false;
+           dice2.Pour = false;
+
         }
     }
 
