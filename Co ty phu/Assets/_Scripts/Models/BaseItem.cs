@@ -18,10 +18,11 @@ public class BaseItem : MonoBehaviour
     private EPlotColor _color;
     public EPlotColor Color { get => _color; set => _color = value; }
 
-    public void SetLocationById( int id)
+    public void SetLocationById(int id)
     {
         Location = new Vector2();
-        this.transform.position = new Vector3(Map.Current.LeftMargin, 0, id * Map.Current.PlotSize);
+        this.transform.position = new Vector3(Map.Current.BotLeftMargin, this.transform.position.y, Map.Current.BotLeftMargin + id * Map.Current.PlotSize + 0.5f * Map.Current.PlotSize); // vì mảnh đất dọc dài hơn ngang 2 lần
+        //Debug.Log("position"+ this.transform.position);
     }
 
     

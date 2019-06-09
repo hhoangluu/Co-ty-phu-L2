@@ -19,23 +19,25 @@ public class Map : MonoBehaviour
         get
         {
             if (plot_size < 0)
-                plot_size = plotVerticalPrefap.GetComponent<Plot>().SIZEY;
+                plot_size = plotHorizontalPrefap.GetComponent<Plot>().SIZEX;
             return plot_size;
         }
     }
 
-    private float left_margin = -1;
-    public float LeftMargin
+    private float botleft_margin = -1;
+    public float BotLeftMargin
     {
         get
         {
-            if (left_margin < 0)
-                left_margin = -4.5f * plotVerticalPrefap.GetComponent<Plot>().SIZEY;
-            return left_margin;
+            if (botleft_margin < 0)
+                botleft_margin = -4.5f * plotHorizontalPrefap.GetComponent<Plot>().SIZEX;
+            return botleft_margin;
         }
     }
 
    
+
+
     private List<BaseItem> items;
     void Awake()
     {
@@ -54,14 +56,16 @@ public class Map : MonoBehaviour
         Start();
     }
     [ContextMenu("InitBuilding1-1")]
-    public void InitBuilding1Plot1()
+    public void InitBuilding1()
     {
         items = new List<BaseItem>();
-        GameObject Building1 = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Items/Building1-Blue"));
+        GameObject Building1 = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Items/Building1-Blue")) as GameObject;
         Building1.transform.parent = this.transform.GetChild(1);
         Building b1 = Building1.GetComponent<Building>();
         items.Add(b1);
-        b1.SetLocationById(1);
+        b1.SetLocationById(2);
+
+        
     }
     public void Init()
     {
