@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
+    
+
     public GameObject Dice;
     public GameObject Player;
     public GameObject Map;
@@ -11,9 +13,9 @@ public class GameController : MonoBehaviour
     private DiceModel diceModel;
     private PlayerModel playerModel;
     private Map mapModel;
-
+    GameInfoModel gameinfo;
     private EPlayer turn;
-
+    Firebase.Database.DatabaseReference Gamedbref = GameInfoModel.mDatabaseRef.Child(GameInfoModel.IdGame);
     void Start()
     {
      //   diceCTL = Dice.GetComponent<DiceCTL>();
@@ -25,7 +27,17 @@ public class GameController : MonoBehaviour
         diceModel.Init();
         playerModel.Init();
         mapModel.Init();
+        gameinfo = new GameInfoModel();
         turn = EPlayer.RED;
+
+        Gamedbref.SetRawJsonValueAsync(gameinfo.ToJson());
+
+       // string json = JsonUtility.ToJson(playerinfo);
+      //  Debug.Log(json);
+        //json = "{\""+ PlayerModel.Uid + "\":" + json + "}";
+        //Gamedbref.Child("Turn").SetValueAsync("RED");
+        //Gamedbref.Child("Players").SetRawJsonValueAsync(json);
+
     }
 
     // Update is called once per frame
@@ -36,6 +48,7 @@ public class GameController : MonoBehaviour
             Debug.Log("Turn " + turn);
             diceModel.PourDice();
             
+
         }
         if (diceModel.IsPourDone() && !playerModel.IsMove && playerModel.Player == turn )
         {

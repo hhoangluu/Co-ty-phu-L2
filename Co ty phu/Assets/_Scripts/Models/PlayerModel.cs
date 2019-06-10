@@ -5,6 +5,8 @@ using DG.Tweening;
 
 public class PlayerModel : MonoBehaviour
 {
+   
+
     private EPlayer _player;
 
     private int _money;
@@ -20,15 +22,19 @@ public class PlayerModel : MonoBehaviour
     public int Position { get => _position; set => _position = value; }
     public bool IsMove { get => _isMove; set => _isMove = value; }
     public EPlayer Player { get => _player; set => _player = value; }
-   
+    public static string Uid;
+
 
     public void Init()
     {
+        Uid = "hiZfaSqGovPl55Dv9m4JTxC5wHs1";
         _isMove = false;
         _position = 0;
         _player = EPlayer.RED;
+        _money = 200;
+        Money = 200;
     }
-
+    
     public void Move(int point)
     {
         _isMove = true;
