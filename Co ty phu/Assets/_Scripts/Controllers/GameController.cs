@@ -37,7 +37,7 @@ public class GameController : MonoBehaviour
             diceModel.PourDice();
             
         }
-        if (diceModel.IsPourDone() && !playerModel.IsMove && playerModel.Player == turn )
+        if (diceModel.IsPourDone() && !playerModel.IsMove /*&& playerModel.Player == turn*/ )
         {
             Debug.Log("Bat dau di chuyen");
           //  Debug.Log("Turn " + turn);
@@ -86,7 +86,7 @@ public class GameController : MonoBehaviour
 
     IEnumerator Play()
     {
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(1);
         Deal();
     }
 

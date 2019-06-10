@@ -32,24 +32,18 @@ public class PlayerModel : MonoBehaviour
     public void Move(int point)
     {
         _isMove = true;
-        _position = _position + point;
-        if (_position > 31 )
-        {
-            _position -= 31;
-        }
-        Debug.Log("dang di chuyen" + point + " Den vi tri " + _position);
         Sequence s = DOTween.Sequence();
-        if (_position < 9)
+        while (point > 0)
         {
-            transform.DOMove(CanculatePosition(_position), 2f);
+            if(_position > 30)
+            {
+                _position -= 32;
+            }
+            s.Append(transform.DOMove(CanculatePosition(++_position), 0.1f));
+            point--;
         }
-        else if (_position < 17)
-        {
-            s.Append(transform.DOMove(CanculatePosition(8), 1f));
-            s.Append(transform.DOMove(CanculatePosition(_position ), 1f));
-        }
-        
-        
+
+
     }
 
     public void PlayerUpdate()
@@ -74,6 +68,18 @@ public class PlayerModel : MonoBehaviour
         {
          //   Debug.Log("Vi tri tinh toan " + newpos +" " + _position);
             newpos.z = Map.Current.TopRightMargin;
+            newpos.y = transform.position.y;
+        }
+        else if (_position < 25)
+        {
+            //   Debug.Log("Vi tri tinh toan " + newpos +" " + _position);
+            newpos.x = Map.Current.TopRightMargin;
+            newpos.y = transform.position.y;
+        }
+        else if (_position < 32)
+        {
+            //   Debug.Log("Vi tri tinh toan " + newpos +" " + _position);
+            newpos.z = Map.Current.BotLeftMargin;
             newpos.y = transform.position.y;
         }
         return newpos;

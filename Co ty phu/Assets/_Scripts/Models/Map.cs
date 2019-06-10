@@ -67,13 +67,24 @@ public class Map : MonoBehaviour
     public void InitBuilding1(int id)
     {
         items = new List<BaseItem>();
-        GameObject Building1 = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Items/22-Red-PisaTower")) as GameObject;
-        Building1.transform.parent = this.transform.GetChild(1);
-        Building b1 = Building1.GetComponent<Building>();
-        items.Add(b1);
-        b1.SetBuildingLocationById(id);
-        
-        
+        //GameObject Building1 = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Items/Building1-Blue")) as GameObject;
+        GameObject Building2 = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Items/7-Residence-Blue Variant")) as GameObject;
+        //GameObject Building3 = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Items/Building3-Red")) as GameObject;
+
+        //Building1.transform.parent = this.transform.GetChild(1);
+        Building2.transform.parent = this.transform.GetChild(1);
+        //Building3.transform.parent = this.transform.GetChild(1);
+        //Building b1 = Building1.GetComponent<Building>();
+        Building b2 = Building2.GetComponent<Building>();
+        //Building b3 = Building3.GetComponent<Building>();
+        //items.Add(b1);
+        items.Add(b2);
+        //items.Add(b3);
+        //b1.SetBuilding1LocationById(id);
+        b2.SetBuilding2LocationById(id);
+        //b3.SetBuilding3LocationById(id);
+
+
     }
 
 
