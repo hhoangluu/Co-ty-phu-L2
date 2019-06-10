@@ -93,6 +93,10 @@ public class GameController : MonoBehaviour
     public void BuyBuilding()
     {
         mapModel.InitBuilding1(playerModel.Position);
+        mapModel.InitBuilding2(playerModel.Position);
+        mapModel.InitBuilding3(playerModel.Position);
+
+
         mapModel.hideDeal();
         
        // yield return new WaitForSeconds(1);

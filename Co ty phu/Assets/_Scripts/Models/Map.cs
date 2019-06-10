@@ -46,7 +46,7 @@ public class Map : MonoBehaviour
     }
 
 
-    private List<BaseItem> items;
+    private List<BaseItem> items= new List<BaseItem>();
     void Awake()
     {
         Current = this;
@@ -64,27 +64,32 @@ public class Map : MonoBehaviour
         Init();
     }
     //[ContextMenu("InitBuilding1-1")]
+   
     public void InitBuilding1(int id)
     {
-        items = new List<BaseItem>();
-        //GameObject Building1 = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Items/Building1-Blue")) as GameObject;
-        GameObject Building2 = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Items/7-Residence-Blue Variant")) as GameObject;
-        //GameObject Building3 = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Items/Building3-Red")) as GameObject;
+        GameObject Building1 = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Items/Building1-Blue")) as GameObject;
+        Building1.transform.parent = this.transform.GetChild(1);
+        Building b1 = Building1.GetComponent<Building>();
+        items.Add(b1);
+        b1.SetBuilding1LocationById(id); 
 
-        //Building1.transform.parent = this.transform.GetChild(1);
+    }
+    public void InitBuilding2(int id)
+    { 
+        GameObject Building2 = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Items/Items/Building2-Red")) as GameObject;
         Building2.transform.parent = this.transform.GetChild(1);
-        //Building3.transform.parent = this.transform.GetChild(1);
-        //Building b1 = Building1.GetComponent<Building>();
         Building b2 = Building2.GetComponent<Building>();
-        //Building b3 = Building3.GetComponent<Building>();
-        //items.Add(b1);
         items.Add(b2);
-        //items.Add(b3);
-        //b1.SetBuilding1LocationById(id);
         b2.SetBuilding2LocationById(id);
-        //b3.SetBuilding3LocationById(id);
+    }
 
-
+    public void InitBuilding3(int id)
+    {
+        GameObject Building3 = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Items/Items/Building3-Red")) as GameObject;
+        Building3.transform.parent = this.transform.GetChild(1);
+        Building b3 = Building3.GetComponent<Building>();
+        items.Add(b3);
+        b3.SetBuilding3LocationById(id);
     }
 
 
