@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "366381262761",
+    "firebase_url": "https://monopoly-14e94.firebaseio.com",
+    "project_id": "monopoly-14e94",
+    "storage_bucket": "monopoly-14e94.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:366381262761:android:01d73b5b0d38ca7c",
+        "android_client_info": {
+          "package_name": "com.th16.Monopoly"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "366381262761-pp9t2s60420fjrgp7g8hngkv00qt2j06.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBowUOzAQma68nqDmGCDi3GF92_UGPR9YU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "366381262761-pp9t2s60420fjrgp7g8hngkv00qt2j06.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
