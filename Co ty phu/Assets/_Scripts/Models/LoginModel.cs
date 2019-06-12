@@ -11,6 +11,8 @@ public class LoginModel : MonoBehaviour
     public InputField passwordText;
     private string idToken;
     private Firebase.Auth.FirebaseAuth auth;
+    private bool isauth;
+
     public string localId { get; private set; }
 
     public void SignInUserButton()
@@ -39,11 +41,13 @@ public class LoginModel : MonoBehaviour
             if (task.IsCanceled)
             {
                 Debug.LogError("SignInWithEmailAndPasswordAsync was canceled.");
+                isauth = false;
                 return;
             }
             if (task.IsFaulted)
             {
                 Debug.LogError("SignInWithEmailAndPasswordAsync encountered an error: " + task.Exception);
+                isauth = false;
                 return;
             }
 
@@ -51,8 +55,17 @@ public class LoginModel : MonoBehaviour
             Debug.LogFormat("User signed in successfully: {0} ({1})",
                 newUser.DisplayName, newUser.UserId);
             PlayerModel.Uid = newUser.UserId;
-            SceneManager.LoadScene(2);
+            isauth = true;
         });
+    }
+    public void SignUpBtn()
+    {
+        SceneManager.LoadScene(1);
+    }
+    private void Update()
+    {
+      if (isauth) SceneManager.LoadScene(2);
+        
     }
 
 }

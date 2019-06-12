@@ -76,7 +76,7 @@ public class Map : MonoBehaviour
     }
     public void InitBuilding2(int id)
     { 
-        GameObject Building2 = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Items/Items/Building2-Red")) as GameObject;
+        GameObject Building2 = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Items/Building2-Red")) as GameObject;
         Building2.transform.parent = this.transform.GetChild(1);
         Building b2 = Building2.GetComponent<Building>();
         items.Add(b2);
@@ -85,7 +85,7 @@ public class Map : MonoBehaviour
 
     public void InitBuilding3(int id)
     {
-        GameObject Building3 = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Items/Items/Building3-Red")) as GameObject;
+        GameObject Building3 = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Items/Building3-Red")) as GameObject;
         Building3.transform.parent = this.transform.GetChild(1);
         Building b3 = Building3.GetComponent<Building>();
         items.Add(b3);

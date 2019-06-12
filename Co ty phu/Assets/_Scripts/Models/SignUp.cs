@@ -5,7 +5,9 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System;
 
+[Serializable]
 public class SignUp : MonoBehaviour
 {
     public InputField emailText;
@@ -16,11 +18,8 @@ public class SignUp : MonoBehaviour
     private Firebase.Auth.FirebaseAuth auth;
 
 
-    private string getLocalId;
-
-
-
-
+    private bool isauth;
+    
     public static string playerScore;
     public static string userName;
     public static string localId;
@@ -46,25 +45,40 @@ public class SignUp : MonoBehaviour
             if (task.IsCanceled)
             {
                 Debug.LogError("CreateUserWithEmailAndPasswordAsync was canceled.");
-
+                isauth = false;
                 return;
             }
             if (task.IsFaulted)
             {
                 Debug.LogError("CreateUserWithEmailAndPasswordAsync encountered an error: " + task.Exception);
+                isauth = false;
                 return;
             }
 
             // Firebase user has been created.
             Firebase.Auth.FirebaseUser newUser = task.Result;
+            
             Debug.LogFormat("Firebase user created successfully: {0} ({1})",
                 newUser.DisplayName, newUser.UserId);
-            SceneManager.LoadScene(0);
+            isauth = true;
+          
         });
+        Debug.Log(isauth);
+        
+            
     }
-   
+    private void Update()
+    {
+        if (isauth) SceneManager.LoadScene(0);
+    }
+
     public void SignUpUserButton()
     {
         SignUpUser(emailText.text, usernameText.text, passwordText.text);
+    }
+
+    private void LoadSceneLogin()
+    {
+       
     }
 }

@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    
 
     public GameObject Dice;
     public GameObject Player;
@@ -15,7 +14,7 @@ public class GameController : MonoBehaviour
     private Map mapModel;
     GameInfoModel gameinfo;
     private EPlayer turn;
-    Firebase.Database.DatabaseReference Gamedbref = GameInfoModel.mDatabaseRef.Child(GameInfoModel.IdGame);
+    Firebase.Database.DatabaseReference Gamedbref = GameInfoModel.mDatabaseRef.Child("Game").Child(GameInfoModel.IdGame);
     void Start()
     {
      //   diceCTL = Dice.GetComponent<DiceCTL>();

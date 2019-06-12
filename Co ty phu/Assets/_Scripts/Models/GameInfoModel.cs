@@ -8,7 +8,7 @@ using Firebase.Unity.Editor;
 public class GameInfoModel
 {
    
-    public static DatabaseReference mDatabaseRef;
+    public static DatabaseReference mDatabaseRef; // ROOT
     public static string IdGame;
     public int playerCount;
     public string Turn;
@@ -33,7 +33,7 @@ public class GameInfoModel
     {
         string json ="";
 
-            json = "{\"playercount\":\""+playerCount+ "\",\"player\": {\"" + playerInfo.Uid+"\": "+ JsonUtility.ToJson(playerInfo) +"},\"Turn\":\"RED\",\"Dice\":"+ JsonUtility.ToJson(diceInfo) +"}";
+            json = "{\"Items\":{\"playercount\":\"" + playerCount+ "\",\"player\": {\"" + playerInfo.Uid+"\": "+ JsonUtility.ToJson(playerInfo) +"},\"Turn\":\"RED\",\"Dice\":"+ JsonUtility.ToJson(diceInfo) + "}}";
           return json;
     }
 
