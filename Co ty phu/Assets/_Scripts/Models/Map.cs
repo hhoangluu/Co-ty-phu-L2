@@ -11,6 +11,20 @@ public class Map : MonoBehaviour
     public GameObject plotHorizontalPrefap;
     public GameObject bigPlotPrefap;
     public GameObject Deal;
+    public GameObject DealWonders;
+    public GameObject DealMinigame;
+    public GameObject DealWorldCup;
+    public GameObject DealChance;
+    public GameObject DealPrison;
+    public GameObject DealTravel;
+    public GameObject DealHonDao;
+    public GameObject DealThue;
+    public GameObject DealStart;
+
+    public Building[] Ar_BuidingModel;
+
+    public List<BaseItem> items;
+
 
     private float plot_size = -1;
     public float PlotSize
@@ -46,13 +60,20 @@ public class Map : MonoBehaviour
     }
 
 
-    private List<BaseItem> items= new List<BaseItem>();
     void Awake()
     {
         Current = this;
+        Current.items = new List<BaseItem>();
+        Current.Ar_BuidingModel = new Building[32];
+        for (int i = 0; i < 32; i++)
+        {
+            Current.Ar_BuidingModel[i] = new Building(i);
+        }
     }
     public Vector3 basePosition;
     private Plot[] _plots;
+    private object mapModel;
+
     public Plot[] Plots
     {
         get { return _plots; }
@@ -64,32 +85,44 @@ public class Map : MonoBehaviour
         Init();
     }
     //[ContextMenu("InitBuilding1-1")]
-   
-    public void InitBuilding1(int id)
+
+    public void InitBuilding1(int id, string color)
     {
-        GameObject Building1 = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Items/Building1-Blue")) as GameObject;
+        //items = new List<BaseItem>();
+        GameObject Building1 = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Items/Building1-Red")) as GameObject;
         Building1.transform.parent = this.transform.GetChild(1);
         Building b1 = Building1.GetComponent<Building>();
         items.Add(b1);
-        b1.SetBuilding1LocationById(id); 
-
+        b1.SetBuilding1LocationById(id);
     }
-    public void InitBuilding2(int id)
-    { 
+
+    public void InitBuilding2(int id, string color)
+    {
+
         GameObject Building2 = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Items/Building2-Red")) as GameObject;
         Building2.transform.parent = this.transform.GetChild(1);
         Building b2 = Building2.GetComponent<Building>();
         items.Add(b2);
         b2.SetBuilding2LocationById(id);
     }
-
-    public void InitBuilding3(int id)
+    public void InitBuilding3(int id, string color)
     {
+        //items = new List<BaseItem>();
         GameObject Building3 = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Items/Building3-Red")) as GameObject;
         Building3.transform.parent = this.transform.GetChild(1);
         Building b3 = Building3.GetComponent<Building>();
         items.Add(b3);
         b3.SetBuilding3LocationById(id);
+    }
+
+    public void InitWonders(int id, string color)
+    {
+        //items = new List<BaseItem>();
+        GameObject Building3 = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Items/" + id + "-" + color)) as GameObject;
+        Building3.transform.parent = this.transform.GetChild(1);
+        Building b3 = Building3.GetComponent<Building>();
+        items.Add(b3);
+        b3.SetWondersLocationById(id);
     }
 
 
@@ -221,13 +254,106 @@ public class Map : MonoBehaviour
         }
     }
 
-    public void ShowDeal()
+    public void ShowDeal(int pos)
     {
-        Deal.active = true;
+        //Deal.active = true;
+        #region từng trường hợp
+        if (pos == 0)
+        {
+            DealStart.active = true;
+        }
+        else if (pos == 2)
+        {
+            DealMinigame.active = true;
+        }
+        else if (pos == 8)
+        {
+            DealPrison.active = true;
+        }
+        else if (pos == 16)
+        {
+            DealWorldCup.active = true;
+        }
+        else if (pos == 24)
+        {
+            DealTravel.active = true;
+        }
+        else if (pos == 4 || pos == 9 || pos == 14 || pos == 18 || pos == 25)
+        {
+            DealHonDao.active = true;
+        }
+        else if (pos == 12 || pos == 20 || pos == 28)
+        {
+            DealChance.active = true;
+        }
+        else if (pos == 30)
+        {
+            DealThue.active = true;
+        }
+        else
+        {
+            if(Ar_BuidingModel[pos].Level == 3)
+            {
+                DealWonders.active = true;
+            }
+            else
+            {
+                Deal.active = true;
+            }
+        }
+        #endregion
+
     }
 
-    public void hideDeal()
+    public void hideDeal(int pos)
     {
-        Deal.active = false;
+        //Deal.active = false;
+
+        #region Từng trường hợp
+        if (pos == 0)
+        {
+            DealStart.active = false;
+        }
+        else if (pos == 2)
+        {
+            DealMinigame.active = false;
+        }
+        else if (pos == 8)
+        {
+            DealPrison.active = false;
+        }
+        else if (pos == 16)
+        {
+            DealWorldCup.active = false;
+        }
+        else if (pos == 24)
+        {
+            DealTravel.active = false;
+        }
+        else if (pos == 4 || pos == 9 || pos == 14 || pos == 18 || pos == 25)
+        {
+            DealHonDao.active = false;
+        }
+        else if (pos == 12 || pos == 20 || pos == 28)
+        {
+            DealChance.active = false;
+        }
+        else if (pos == 30)
+        {
+            DealThue.active = false;
+        }
+        else
+        {
+            if (Ar_BuidingModel[pos].Level == 3)
+            {
+                DealWonders.active = false;
+            }
+            else
+            {
+                Deal.active = false;
+            }
+        }
+        #endregion
+
     }
 }
