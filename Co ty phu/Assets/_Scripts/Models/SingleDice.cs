@@ -76,16 +76,21 @@ public class SingleDice : MonoBehaviour
 
     }
 
-    public void PourDiceAgain()
+    public Vector3 PourDiceAgain()
     {
         Reset();
-        PourDice();
+        float x = Random.Range(0, 360);
+        float y = Random.Range(0, 360);
+        float z = Random.Range(0, 360);
+        Vector3 vt3 = new Vector3(x, y, z);
+        return vt3;
     }
 
 
-    public void PourDice()
+    public void PourDice(Vector3 vt3)
     {
         StartCoroutine(Play());
+        transform.Rotate(vt3);
         if (!pour && !hasLanded)
         {
             ms.enabled = true;

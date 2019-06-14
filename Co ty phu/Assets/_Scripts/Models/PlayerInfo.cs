@@ -14,7 +14,7 @@ public class PlayerInfo
     public PlayerInfo()
     {
         Money = 200;
-        Uid = PlayerModel.Uid;
+        Uid = LoginModel.userID;
         Position = 0;
     }
 

@@ -17,29 +17,27 @@ public class PlayerModel : MonoBehaviour
 
     private bool _isMove;
 
-    private float _asset;
 
     public float Money { get => _money; set => _money = value; }
     public int Card { get => _card; set => _card = value; }
     public int Position { get => _position; set => _position = value; }
     public bool IsMove { get => _isMove; set => _isMove = value; }
     public EPlayer Player { get => _player; set => _player = value; }
-    public float Asset { get => _asset; set => _asset = value; }
 
-    public static string Uid;
+    public string Uid;
 
 
     public void Init()
     {
-        Uid = "hiZfaSqGovPl55Dv9m4JTxC5wHs1";
+        Uid = LoginModel.userID;
         _isMove = false;
         _position = 0;
         _player = EPlayer.RED;
         Money = 2000;
-        Asset = 2000;
+        _card = 0;
     }
     
-    public void Move(int point)
+    public void Move(int point, PlayerInfo playerInfo)
     {
       //  GetComponent<Animator>().enabled = true;
         _isMove = true;
@@ -75,9 +73,9 @@ public class PlayerModel : MonoBehaviour
             //}
          //   s.Append(GetComponent<Rigidbody2D>().DOJump(new Vector2(0,0), 4f, 2  , 1));
         }
-      //  GetComponent<Animator>().enabled = false;
+        //  GetComponent<Animator>().enabled = false;
 
-
+        //GameInfoModel.mDatabaseRef.Child("Game").Child("player").Child(Uid).SetRawJsonValueAsync(JsonUtility.ToJson(playerInfo));
     }
 
     public void PlayerUpdate()
