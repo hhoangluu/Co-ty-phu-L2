@@ -13,6 +13,7 @@ public class LoginModel : MonoBehaviour
     private Firebase.Auth.FirebaseAuth auth;
     private bool isauth;
 
+    public static string userID;
     public string localId { get; private set; }
 
     public void SignInUserButton()
@@ -54,7 +55,8 @@ public class LoginModel : MonoBehaviour
             Firebase.Auth.FirebaseUser newUser = task.Result;
             Debug.LogFormat("User signed in successfully: {0} ({1})",
                 newUser.DisplayName, newUser.UserId);
-            PlayerModel.Uid = newUser.UserId;
+            userID = newUser.UserId;
+         //   PlayerModel.Uid = newUser.UserId;
             isauth = true;
         });
     }

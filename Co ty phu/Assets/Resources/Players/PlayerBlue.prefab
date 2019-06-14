@@ -1,5 +1,18 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-3907684107697931388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2414381804358783119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b437a86138af45e4cbdf3c754ba1cdb3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Uid: 
 --- !u!1001 &5953888878832617862
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10,7 +23,7 @@ PrefabInstance:
     - target: {fileID: -927199367670048503, guid: 58771e4776b43a94c802a250bf50fab9,
         type: 3}
       propertyPath: m_Name
-      value: BluePlayer Variant
+      value: PlayerBlue
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 58771e4776b43a94c802a250bf50fab9,
         type: 3}
@@ -84,3 +97,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 58771e4776b43a94c802a250bf50fab9, type: 3}
+--- !u!1 &2414381804358783119 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: 58771e4776b43a94c802a250bf50fab9,
+    type: 3}
+  m_PrefabInstance: {fileID: 5953888878832617862}
+  m_PrefabAsset: {fileID: 0}
