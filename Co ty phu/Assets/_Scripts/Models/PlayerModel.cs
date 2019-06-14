@@ -9,7 +9,7 @@ public class PlayerModel : MonoBehaviour
 
     private EPlayer _player;
 
-    private int _money;
+    private float _money;
 
     private int _card;
 
@@ -17,11 +17,15 @@ public class PlayerModel : MonoBehaviour
 
     private bool _isMove;
 
-    public int Money { get => _money; set => _money = value; }
+    private float _asset;
+
+    public float Money { get => _money; set => _money = value; }
     public int Card { get => _card; set => _card = value; }
     public int Position { get => _position; set => _position = value; }
     public bool IsMove { get => _isMove; set => _isMove = value; }
     public EPlayer Player { get => _player; set => _player = value; }
+    public float Asset { get => _asset; set => _asset = value; }
+
     public static string Uid;
 
 
@@ -31,8 +35,8 @@ public class PlayerModel : MonoBehaviour
         _isMove = false;
         _position = 0;
         _player = EPlayer.RED;
-        _money = 200;
-        Money = 200;
+        Money = 2000;
+        Asset = 2000;
     }
     
     public void Move(int point)

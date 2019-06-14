@@ -49,8 +49,8 @@ public class DiceModel: MonoBehaviour
         dice2.CheckPoint();
         if (dice1.IsPourDone() && dice2.IsPourDone())
         {
-            Point = dice1.Point + dice2.Point;
-            
+            Point = dice1.Point + dice2.Point;          //Điểm số của 2 xúc xắc
+            //Point = 10;
         }
     }
 
