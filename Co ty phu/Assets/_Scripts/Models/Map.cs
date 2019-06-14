@@ -240,8 +240,8 @@ public class Map : MonoBehaviour
                 return new Vector3(3.5f * SIZE + 0.5f * SIZEBig, base3.y, 3.5f * SIZE + 0.5f * SIZEBig);
             }
             var a = base3.z - ((i % 8) - 1) * SIZE - 0.5f * SIZEBig - 0.5f * SIZE;
-            Debug.Log(a);
-            Debug.Log("base 3" + base3);
+          //  Debug.Log(a);
+          //  Debug.Log("base 3" + base3);
             return new Vector3(4.5f * SIZE, base3.y, a);
         }
         else

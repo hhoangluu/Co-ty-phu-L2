@@ -78,7 +78,7 @@ public class SingleDice : MonoBehaviour
 
     public Vector3 PourDiceAgain()
     {
-        Reset();
+        
         float x = Random.Range(0, 360);
         float y = Random.Range(0, 360);
         float z = Random.Range(0, 360);
@@ -89,8 +89,11 @@ public class SingleDice : MonoBehaviour
 
     public void PourDice(Vector3 vt3)
     {
+        
         StartCoroutine(Play());
+        Reset();
         transform.Rotate(vt3);
+        Debug.Log("rotaion trc khi bay: " + vt3.x + " y: " + vt3.y + " z: " + vt3.z); ;
         if (!pour && !hasLanded)
         {
             ms.enabled = true;
