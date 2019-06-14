@@ -10,6 +10,7 @@ public class LobbyModel : MonoBehaviour
 {
     public GameObject canvas;
     public GameObject roomprefaps;
+    public GameObject Loading;
     private GameInfoModel info;
     private List<RoomInfo> rooms = new List<RoomInfo>();
     
@@ -146,6 +147,7 @@ public class LobbyModel : MonoBehaviour
             roomGO.transform.position = new Vector3(roomGO.transform.position.x + 3* count, transform.position.y);
         }
         canvas.active = true;
+        Loading.active = false;
 
     }
     bool isRenderDone()

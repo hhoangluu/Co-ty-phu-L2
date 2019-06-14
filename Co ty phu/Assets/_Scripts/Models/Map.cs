@@ -18,7 +18,7 @@ public class Map : MonoBehaviour
         get
         {
             if (plot_size < 0)
-                plot_size = plotHorizontalPrefap.GetComponent<Plot>().SIZEX;
+                plot_size = plotHorizontalPrefap.GetComponentInChildren<Plot>().SIZEX;
             return plot_size;
         }
     }
@@ -29,7 +29,7 @@ public class Map : MonoBehaviour
         get
         {
             if (botleft_margin < 0)
-                botleft_margin = -4.5f * plotHorizontalPrefap.GetComponent<Plot>().SIZEX;
+                botleft_margin = -4.5f * plotHorizontalPrefap.GetComponentInChildren<Plot>().SIZEX;
             return botleft_margin;
         }
     }
@@ -40,7 +40,7 @@ public class Map : MonoBehaviour
         get
         {
             if (topright_margin < 0)
-                topright_margin = 4.5f * plotHorizontalPrefap.GetComponent<Plot>().SIZEX;
+                topright_margin = 4.5f * plotHorizontalPrefap.GetComponentInChildren<Plot>().SIZEX;
             return topright_margin;
         }
     }
@@ -102,22 +102,22 @@ public class Map : MonoBehaviour
             GameObject c = null;
             if (i % 8 == 0)
             {
-                c = GameObject.Instantiate(bigPlotPrefap, CanculatePosition(i), Quaternion.identity) as GameObject;
+                c = GameObject.Instantiate(bigPlotPrefap, CanculatePosition(i), bigPlotPrefap.transform.rotation) as GameObject;
 
             }
             else if ((i > 8 && i < 16) || (i < 32 && i > 24))
             {
-                c = GameObject.Instantiate(plotHorizontalPrefap, CanculatePosition(i), Quaternion.identity) as GameObject;
+                c = GameObject.Instantiate(plotHorizontalPrefap, CanculatePosition(i), plotHorizontalPrefap.transform.rotation) as GameObject;
             }
             else
             {
-                c = GameObject.Instantiate(plotVerticalPrefap, CanculatePosition(i), Quaternion.identity) as GameObject;
+                c = GameObject.Instantiate(plotVerticalPrefap, CanculatePosition(i), plotVerticalPrefap.transform.rotation) as GameObject;
             }
 
 
             c.transform.parent = this.transform.GetChild(0);
-            c.GetComponent<Collider>().tag = "Plot";
-            _plots[i] = c.GetComponent<Plot>();
+          //  c.GetComponent<Collider>().tag = "Plot";
+            _plots[i] = c.GetComponentInChildren<Plot>();
             _plots[i].name = "plot " + i;
             
             // set color for plot
@@ -171,15 +171,15 @@ public class Map : MonoBehaviour
 
     public Vector3 CanculatePosition(int i)
     {
-        float SIZE = plotHorizontalPrefap.GetComponent<Plot>().SIZEX;
-        float SIZEY = plotHorizontalPrefap.GetComponent<Plot>().SIZEY;
+        float SIZE = plotHorizontalPrefap.GetComponentInChildren<Plot>().SIZEX;
+        float SIZEY = plotHorizontalPrefap.GetComponentInChildren<Plot>().SIZEY;
         float SIZEBig = bigPlotPrefap.GetComponent<Plot>().SIZEBig;
 
         //Debug.Log(SIZE);
-        Vector3 base1 = new Vector3(basePosition.x, 0, basePosition.z);
+        Vector3 base1 = new Vector3(basePosition.x , 0, basePosition.z);
         Vector3 base2 = new Vector3(basePosition.x, 0, basePosition.z + 8 * SIZE);
-        Vector3 base3 = new Vector3(basePosition.x + 8 * SIZE, 0, basePosition.z + 8 * SIZE);
-        Vector3 base4 = new Vector3(basePosition.x + 8 * SIZE, 0, basePosition.z);
+        Vector3 base3 = new Vector3(basePosition.x + 8 * SIZE, 0, 3.5f * SIZE + 0.5f * SIZEBig);
+        Vector3 base4 = new Vector3(3.5f * SIZE + 0.5f * SIZEBig, 0, basePosition.z);
         if (i < 8)
         {
             if (i == 0)
@@ -187,7 +187,9 @@ public class Map : MonoBehaviour
                 return new Vector3(-3.5f * SIZE - 0.5f * SIZEBig, base1.y, -3.5f * SIZE - 0.5f * SIZEBig);
             }
             //return new Vector3(base1.x -  0.5f*SIZEY, base1.y, base1.z + i * SIZE);
-            return new Vector3(-4.5f * SIZE, base1.y, base1.z + i * SIZE);
+            //Debug.Log(base1.z + (i - 1) * SIZE + 0.5f * SIZEBig);
+            return new Vector3(-4.5f * SIZE, base1.y, base1.z + (i-1) * SIZE + 0.5f*SIZEBig +0.5f*SIZE);
+            Debug.Log(base1.z + (i - 1) * SIZE + 0.5f * SIZEBig);
         }
         else if (i < 16)
         {
@@ -195,7 +197,8 @@ public class Map : MonoBehaviour
             {
                 return new Vector3(-3.5f * SIZE - 0.5f * SIZEBig, base2.y, 3.5f * SIZE + 0.5f * SIZEBig);
             }
-            return new Vector3(base2.x + (i % 8) * SIZE, base2.y, 4.5f * SIZE);
+           
+            return new Vector3(base2.x + ((i % 8) - 1) * SIZE + 0.5f * SIZEBig + 0.5f * SIZE, base2.y, 4.5f * SIZE);
         }
         else if (i < 24)
         {
@@ -203,7 +206,10 @@ public class Map : MonoBehaviour
             {
                 return new Vector3(3.5f * SIZE + 0.5f * SIZEBig, base3.y, 3.5f * SIZE + 0.5f * SIZEBig);
             }
-            return new Vector3(4.5f * SIZE, base3.y, base3.z - (i % 8) * SIZE);
+            var a = base3.z - ((i % 8) - 1) * SIZE - 0.5f * SIZEBig - 0.5f * SIZE;
+            Debug.Log(a);
+            Debug.Log("base 3" + base3);
+            return new Vector3(4.5f * SIZE, base3.y, a);
         }
         else
         {
@@ -211,7 +217,7 @@ public class Map : MonoBehaviour
             {
                 return new Vector3(3.5f * SIZE + 0.5f * SIZEBig, base4.y, -3.5f * SIZE - 0.5f * SIZEBig);
             }
-            return new Vector3(base4.x - (i % 8) * SIZE, base4.y, -4.5f * SIZE);
+            return new Vector3(base4.x - ((i % 8)-1) * SIZE - 0.5f * SIZEBig - 0.5f * SIZE, base4.y, -4.5f * SIZE);
         }
     }
 

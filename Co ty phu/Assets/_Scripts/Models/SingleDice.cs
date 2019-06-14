@@ -85,6 +85,7 @@ public class SingleDice : MonoBehaviour
 
     public void PourDice()
     {
+        StartCoroutine(Play());
         if (!pour && !hasLanded)
         {
             ms.enabled = true;
@@ -96,7 +97,12 @@ public class SingleDice : MonoBehaviour
         }
 
     }
-
+    IEnumerator Play()
+    {
+        yield return new WaitWhile(() => !pour);
+        yield return new WaitForSeconds(6f);
+        rb.Sleep();
+    }
     private void Reset()
     {
         transform.position = initPosition;

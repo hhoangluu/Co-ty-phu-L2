@@ -12,9 +12,9 @@ public class GameController : MonoBehaviour
     private DiceModel diceModel;
     private PlayerModel playerModel;
     private Map mapModel;
-    GameInfoModel gameinfo;
+  //  GameInfoModel gameinfo;
     private EPlayer turn;
-    Firebase.Database.DatabaseReference Gamedbref = GameInfoModel.mDatabaseRef.Child("Game").Child(GameInfoModel.IdGame);
+   // Firebase.Database.DatabaseReference Gamedbref = GameInfoModel.mDatabaseRef.Child("Game").Child(GameInfoModel.IdGame);
     void Start()
     {
      //   diceCTL = Dice.GetComponent<DiceCTL>();
@@ -26,10 +26,10 @@ public class GameController : MonoBehaviour
         diceModel.Init();
         playerModel.Init();
         mapModel.Init();
-        gameinfo = new GameInfoModel();
+    //    gameinfo = new GameInfoModel();
         turn = EPlayer.RED;
 
-        Gamedbref.SetRawJsonValueAsync(gameinfo.ToJson());
+      //  Gamedbref.SetRawJsonValueAsync(gameinfo.ToJson());
 
        // string json = JsonUtility.ToJson(playerinfo);
       //  Debug.Log(json);
@@ -98,7 +98,8 @@ public class GameController : MonoBehaviour
 
     IEnumerator Play()
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitWhile(() => playerModel.IsMove == true);
+     //   playerModel.GetComponent<Animator>().enabled = false;
         Deal();
     }
 

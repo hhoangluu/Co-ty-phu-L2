@@ -125,7 +125,7 @@ public class ResourcesCTL
         {
             if (_color4 == null)
             {
-                _color4 = Resources.Load<Material>("Materials/15-16");//load material
+                _color4 = Resources.Load<Material>("Materials/13-15");//load material
             }
             return _color4;
         }
