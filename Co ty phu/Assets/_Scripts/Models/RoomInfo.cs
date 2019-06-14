@@ -1,4 +1,4 @@
-﻿public class RoomInfo
+﻿internal class RoomInfo
 {
    public string idGame;
     public int number;
