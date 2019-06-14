@@ -37,7 +37,7 @@ public class PlayerModel : MonoBehaviour
         _card = 0;
     }
     
-    public void Move(int point)
+    public void Move(int point, PlayerInfo playerInfo)
     {
       //  GetComponent<Animator>().enabled = true;
         _isMove = true;
@@ -73,9 +73,9 @@ public class PlayerModel : MonoBehaviour
             //}
          //   s.Append(GetComponent<Rigidbody2D>().DOJump(new Vector2(0,0), 4f, 2  , 1));
         }
-      //  GetComponent<Animator>().enabled = false;
+        //  GetComponent<Animator>().enabled = false;
 
-
+        //GameInfoModel.mDatabaseRef.Child("Game").Child("player").Child(Uid).SetRawJsonValueAsync(JsonUtility.ToJson(playerInfo));
     }
 
     public void PlayerUpdate()

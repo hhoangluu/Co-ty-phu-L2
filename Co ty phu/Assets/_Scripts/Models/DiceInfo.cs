@@ -1,13 +1,13 @@
 ﻿public class DiceInfo
 {
-    public int point1;
-    public int point2;
-    public int rotation;
+    public float x;
+    public float y;
+    public float z;
 
     public DiceInfo()
     {
-        point1 = 0;
-        point2 = 0;
-        rotation = 0;
+        x = 0;
+        y = 0;
+        z = 0;
     }
 }

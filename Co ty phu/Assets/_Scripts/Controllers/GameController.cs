@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameController : MonoBehaviour
 {
 
-
+    public PlayerInfo playerinfo;
     public GameObject Dice;
 
     public GameObject Map;
@@ -24,7 +24,6 @@ public class GameController : MonoBehaviour
     {
         InitMe();
        // playerModels = new PlayerModel[3];
-
 
         diceModel = Dice.GetComponent<DiceModel>();
 
@@ -65,7 +64,7 @@ public class GameController : MonoBehaviour
         {
             Debug.Log("Bat dau di chuyen");
             //  Debug.Log("Turn " + turn);
-            meModel.Move(diceModel.Point);
+            meModel.Move(diceModel.Point, playerinfo);
 
             StartCoroutine(Play());
             NextTurn();
