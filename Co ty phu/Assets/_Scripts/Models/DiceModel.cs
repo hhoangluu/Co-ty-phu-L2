@@ -1,17 +1,13 @@
-﻿using Firebase.Database;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 
-public class DiceModel : MonoBehaviour
+public class DiceModel: MonoBehaviour
 {
     public void Start()
     {
-        FirebaseDatabase.DefaultInstance
-      .GetReference("Game").Child(GameInfoModel.IdGame).Child("Dice")
-       .ValueChanged += HandleValueChanged;
         Point = 0;
         IsDouble = false;
         Rotation = 0;
@@ -44,7 +40,7 @@ public class DiceModel : MonoBehaviour
 
     public void Init()
     {
-
+       
         dice1 = dice1GO.GetComponent<SingleDice>();
         dice2 = dice2GO.GetComponent<SingleDice>();
     }
@@ -58,9 +54,11 @@ public class DiceModel : MonoBehaviour
     }
 
 
-    public void PourDiceOther(Vector3 vt3D1, Vector3 vt3D2)
+    public void PourDiceOther()
     {
-       
+        Vector3 vt3D1 = new Vector3();
+        Vector3 vt3D2 = new Vector3();
+        pullDice(out vt3D1, out vt3D2);
         dice1.PourDice(vt3D1);
         dice2.PourDice(vt3D2);
     }
@@ -79,8 +77,8 @@ public class DiceModel : MonoBehaviour
         RotateDice2.z = vt3D2.z;
 
 
-        GameInfoModel.mDatabaseRef.Child("Game").Child(GameInfoModel.IdGame).Child("Dice").Child("dice1").SetRawJsonValueAsync(JsonUtility.ToJson(RotateDice1));
-        GameInfoModel.mDatabaseRef.Child("Game").Child(GameInfoModel.IdGame).Child("Dice").Child("dice2").SetRawJsonValueAsync(JsonUtility.ToJson(RotateDice2));
+        GameInfoModel.mDatabaseRef.Child("Game").Child(GameInfoModel.IdGame).Child("dice1").SetRawJsonValueAsync(JsonUtility.ToJson(RotateDice1));
+        GameInfoModel.mDatabaseRef.Child("Game").Child(GameInfoModel.IdGame).Child("dice2").SetRawJsonValueAsync(JsonUtility.ToJson(RotateDice2));
 
     }
 
@@ -109,8 +107,8 @@ public class DiceModel : MonoBehaviour
     {
         if (dice1.IsPourDone() && dice2.IsPourDone())
         {
-            dice1.Pour = false;
-            dice2.Pour = false;
+           dice1.Pour=  false;
+           dice2.Pour = false;
 
         }
     }
@@ -119,28 +117,8 @@ public class DiceModel : MonoBehaviour
     {
         return (dice1.IsPourDone() && dice2.IsPourDone());
     }
+        
+       
 
-    void HandleValueChanged(object sender, ValueChangedEventArgs args)
-    {
-
-        if (args.DatabaseError != null)
-        {
-            Debug.LogError(args.DatabaseError.Message);
-            return;
-        }
-        DataSnapshot snapshot = args.Snapshot;
-
-            Vector3 v1 = new Vector3();
-        Vector3 v2 = new Vector3();
-        v1.x = float.Parse(snapshot.Child("dice1").Child("x").Value.ToString());
-        v1.y = float.Parse(snapshot.Child("dice1").Child("y").Value.ToString());
-        v1.z = float.Parse(snapshot.Child("dice1").Child("z").Value.ToString());
-
-        v2.x = float.Parse(snapshot.Child("dice2").Child("x").Value.ToString());
-        v2.y = float.Parse(snapshot.Child("dice2").Child("y").Value.ToString());
-        v2.z = float.Parse(snapshot.Child("dice2").Child("z").Value.ToString());
-        Debug.Log("Lay dice x: " + v1.x +" y: " +v1.y );
-        PourDiceOther(v1, v2);
-
-    }
+    
 }
