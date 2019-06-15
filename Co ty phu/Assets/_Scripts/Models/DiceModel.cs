@@ -1,17 +1,13 @@
-﻿using Firebase.Database;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 
-public class DiceModel : MonoBehaviour
+public class DiceModel: MonoBehaviour
 {
     public void Start()
     {
-        FirebaseDatabase.DefaultInstance
-      .GetReference("Game").Child(GameInfoModel.IdGame).Child("Dice")
-       .ValueChanged += HandleValueChanged;
         Point = 0;
         IsDouble = false;
         Rotation = 0;
@@ -44,7 +40,7 @@ public class DiceModel : MonoBehaviour
 
     public void Init()
     {
-
+       
         dice1 = dice1GO.GetComponent<SingleDice>();
         dice2 = dice2GO.GetComponent<SingleDice>();
     }
@@ -58,9 +54,11 @@ public class DiceModel : MonoBehaviour
     }
 
 
-    public void PourDiceOther(Vector3 vt3D1, Vector3 vt3D2)
+    public void PourDiceOther()
     {
-       
+        Vector3 vt3D1 = new Vector3();
+        Vector3 vt3D2 = new Vector3();
+        pullDice(out vt3D1, out vt3D2);
         dice1.PourDice(vt3D1);
         dice2.PourDice(vt3D2);
     }
@@ -109,8 +107,8 @@ public class DiceModel : MonoBehaviour
     {
         if (dice1.IsPourDone() && dice2.IsPourDone())
         {
-            dice1.Pour = false;
-            dice2.Pour = false;
+           dice1.Pour=  false;
+           dice2.Pour = false;
 
         }
     }
@@ -119,6 +117,8 @@ public class DiceModel : MonoBehaviour
     {
         return (dice1.IsPourDone() && dice2.IsPourDone());
     }
+        
+       
 
     void HandleValueChanged(object sender, ValueChangedEventArgs args)
     {
