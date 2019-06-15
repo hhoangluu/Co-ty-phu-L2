@@ -26,6 +26,8 @@ public class LobbyModel : MonoBehaviour
         
         GetAllRoom();
         StartCoroutine(RenderRoom());
+
+        
     }
 
     public void writeNewGame()
@@ -49,9 +51,14 @@ public class LobbyModel : MonoBehaviour
     public void EnterRoom(int number)
     {
         GameInfoModel.IdGame = rooms[number].idGame;
+        info.GetCount();
         string json = JsonUtility.ToJson(info);
         Debug.Log(json);
-        SceneManager.LoadScene(3);
+        if (GameInfoModel.playerCount != 4)
+        {
+            SceneManager.LoadScene(3);
+
+        }
         
     }
 
@@ -149,6 +156,12 @@ public class LobbyModel : MonoBehaviour
         canvas.active = true;
         Loading.active = false;
 
+        //yield return new WaitWhile(() =>  info.isGetCountDone == false);
+        
+        //    GameInfoModel.mDatabaseRef.Child("Game").Child(GameInfoModel.IdGame).Child("playercount").SetValueAsync(GameInfoModel.playerCount.ToString());
+        //Debug.Log("Day la player count day len" + GameInfoModel.playerCount);
+        //    info.isGetCountDone = false;
+        
     }
     bool isRenderDone()
     {
