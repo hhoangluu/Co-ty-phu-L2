@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b437a86138af45e4cbdf3c754ba1cdb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: 1
   Uid: 
 --- !u!1001 &5953888878832617862
 PrefabInstance:
@@ -28,7 +29,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: 58771e4776b43a94c802a250bf50fab9,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -15.1
+      value: -15
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 58771e4776b43a94c802a250bf50fab9,
         type: 3}
@@ -38,7 +39,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: 58771e4776b43a94c802a250bf50fab9,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 11.5
+      value: -15
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 58771e4776b43a94c802a250bf50fab9,
         type: 3}
@@ -48,7 +49,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: 58771e4776b43a94c802a250bf50fab9,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.9997807
+      value: 0.6921433
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 58771e4776b43a94c802a250bf50fab9,
         type: 3}
@@ -58,7 +59,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: 58771e4776b43a94c802a250bf50fab9,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.0209424
+      value: -0.7217601
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 58771e4776b43a94c802a250bf50fab9,
         type: 3}
@@ -73,7 +74,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: 58771e4776b43a94c802a250bf50fab9,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 182.4
+      value: 272.4
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 58771e4776b43a94c802a250bf50fab9,
         type: 3}

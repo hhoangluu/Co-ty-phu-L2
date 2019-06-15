@@ -1,13 +1,23 @@
-﻿public class DiceInfo
+﻿using UnityEngine;
+
+public class DiceInfo
 {
-    public float x;
-    public float y;
-    public float z;
+    public SingleDiceInfo dice1;
+    public SingleDiceInfo dice2;
 
     public DiceInfo()
     {
-        x = 0;
-        y = 0;
-        z = 0;
+        dice1 = new SingleDiceInfo();
+        dice2 = new SingleDiceInfo();
     }
+
+    public string ToJson()
+    {
+        var json = "";
+        json = "{\"dice1\":" + JsonUtility.ToJson(dice1) + ",\"dice2\":" + JsonUtility.ToJson(dice2) + "}";
+
+        return json;
+
+    }
+
 }

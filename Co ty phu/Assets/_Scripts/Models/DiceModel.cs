@@ -69,18 +69,18 @@ public class DiceModel : MonoBehaviour
     public void pushDice(Vector3 vt3D1, Vector3 vt3D2)
     {
         RotateDice1 = new DiceInfo();
-        RotateDice2 = new DiceInfo();
-        RotateDice1.x = vt3D1.x;
-        RotateDice1.y = vt3D1.y;
-        RotateDice1.z = vt3D1.z;
+     //   RotateDice2 = new DiceInfo();
+        RotateDice1.dice1.x = vt3D1.x;
+        RotateDice1.dice1.y = vt3D1.y;
+        RotateDice1.dice1.z = vt3D1.z;
 
-        RotateDice2.x = vt3D2.x;
-        RotateDice2.y = vt3D2.y;
-        RotateDice2.z = vt3D2.z;
+        RotateDice1.dice2.x = vt3D2.x;
+        RotateDice1.dice2.y = vt3D2.y;
+        RotateDice1.dice2.z = vt3D2.z;
 
-
-        GameInfoModel.mDatabaseRef.Child("Game").Child(GameInfoModel.IdGame).Child("Dice").Child("dice1").SetRawJsonValueAsync(JsonUtility.ToJson(RotateDice1));
-        GameInfoModel.mDatabaseRef.Child("Game").Child(GameInfoModel.IdGame).Child("Dice").Child("dice2").SetRawJsonValueAsync(JsonUtility.ToJson(RotateDice2));
+        
+        GameInfoModel.mDatabaseRef.Child("Game").Child(GameInfoModel.IdGame).Child("Dice").SetRawJsonValueAsync(JsonUtility.ToJson(RotateDice1));
+        //GameInfoModel.mDatabaseRef.Child("Game").Child(GameInfoModel.IdGame).Child("Dice").Child("dice2").SetRawJsonValueAsync(JsonUtility.ToJson(RotateDice2));
 
     }
 
@@ -129,7 +129,7 @@ public class DiceModel : MonoBehaviour
             return;
         }
         DataSnapshot snapshot = args.Snapshot;
-
+        // neeus ddung turn thi moi gan du lieu
             Vector3 v1 = new Vector3();
         Vector3 v2 = new Vector3();
         v1.x = float.Parse(snapshot.Child("dice1").Child("x").Value.ToString());

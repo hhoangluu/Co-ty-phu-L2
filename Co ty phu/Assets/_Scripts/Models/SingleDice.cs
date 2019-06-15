@@ -83,6 +83,7 @@ public class SingleDice : MonoBehaviour
         float y = Random.Range(0, 360);
         float z = Random.Range(0, 360);
         Vector3 vt3 = new Vector3(x, y, z);
+        Debug.Log("rotaion sau khi rab dom: " + vt3.x + " y: " + vt3.y + " z: " + vt3.z);
         return vt3;
     }
 
@@ -93,7 +94,7 @@ public class SingleDice : MonoBehaviour
         StartCoroutine(Play());
         Reset();
         transform.Rotate(vt3);
-        Debug.Log("rotaion trc khi bay: " + vt3.x + " y: " + vt3.y + " z: " + vt3.z); ;
+        Debug.Log("rotaion trc khi bay: " + vt3.x + " y: " + vt3.y + " z: " + vt3.z); 
         if (!pour && !hasLanded)
         {
             ms.enabled = true;

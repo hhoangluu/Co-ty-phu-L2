@@ -15,15 +15,13 @@ public class GameInfoModel
     public DiceInfo diceInfo;
     public PlayerInfo playerInfo;
 
-    public bool isGetCountDone;
+    public static bool isGetCountDone;
 
     public GameInfoModel()
     {
 
         playerCount = 0;
-        FirebaseDatabase.DefaultInstance
-      .GetReference("Game")
-       .ValueChanged += HandleValueChanged;
+       
 
         Turn = "RED";
         diceInfo = new DiceInfo();
@@ -33,6 +31,7 @@ public class GameInfoModel
 
         // Get the root reference location of the database.
         mDatabaseRef = FirebaseDatabase.DefaultInstance.RootReference;
+        GetCount();
         
 
     }
@@ -48,6 +47,7 @@ public class GameInfoModel
 
     public void GetCount()
     {
+        
 
         string count = "";
         FirebaseDatabase.DefaultInstance.GetReference("Game").Child(IdGame).Child("playercount").GetValueAsync()
@@ -63,29 +63,16 @@ public class GameInfoModel
                     DataSnapshot snapshot = task.Result;
 
                     count = snapshot.Value.ToString();
-                    if (count == "1")
-                    {
-                        playerCount = 1;
-                    }
-                    if (count == "0")
-                    {
-                        playerCount = 0;
-                    }
-                    if (count == "2")
-                    {
-                        playerCount = 2;
-                    }
-                    if (count == "3")
-                    {
-                        playerCount = 3;
-                    }
+                    playerCount = int.Parse(count.ToString());
                     playerCount++;
                     Debug.Log("DAy la playercount"+ playerCount);
                     isGetCountDone = true;
                     GameInfoModel.mDatabaseRef.Child("Game").Child(GameInfoModel.IdGame).Child("playercount").SetValueAsync(GameInfoModel.playerCount.ToString());
                     Debug.Log("Day la player count day len" + GameInfoModel.playerCount);
-                    isGetCountDone = false;
-
+                   
+                    FirebaseDatabase.DefaultInstance
+     .GetReference("Game").Child(IdGame).Child("playercount")
+      .ValueChanged += HandleValueChanged;
                 }
             });
 
@@ -105,24 +92,46 @@ public class GameInfoModel
         }
         DataSnapshot snapshot = args.Snapshot;
 
-        count = snapshot.Child(IdGame).Child("playercount").Value.ToString();
-        if (count == "2")
+        count = snapshot.Value.ToString();
+        if (playerCount == int.Parse(count))
+            return;
+        playerCount = int.Parse(count.ToString());
+        
+        Debug.Log("Day la count khi thay doi db " + playerCount);
+        GameObject p = null;
+        PlayerModel pModel;
+        if (playerCount == 0)
         {
-            playerCount = 2;
+            p = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Players/PlayerRed")) as GameObject;
+            Debug.Log("Khoi tao thanh cong player 1");
+            pModel = p.GetComponent<PlayerModel>();
+            Debug.Log("Khoi tao thanh cong player 2");
+            pModel.Init();
+            pModel.Uid = ""; /// lay username từ players
+            pModel.Player = EPlayer.RED;
+
         }
-        if (count == "1")
+        else if (playerCount == 2)
         {
-            playerCount = 1;
+            p = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Players/PlayerBlue")) as GameObject;
+            pModel = p.GetComponent<PlayerModel>();
+            pModel.Init();
+            pModel.Player = EPlayer.BLUE;
         }
-        if (count == "3")
+        else if (playerCount == 3)
         {
-            playerCount = 3;
+            p = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Players/PlayerGreen")) as GameObject;
+            pModel = p.GetComponent<PlayerModel>();
+            pModel.Init();
+            pModel.Player = EPlayer.GREEN;
         }
-        if (count == "4")
+        else if (playerCount == 4)
         {
-            playerCount = 4;
+            p = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Players/PlayerYellow")) as GameObject;
+            pModel = p.GetComponent<PlayerModel>();
+            pModel.Init();
+            pModel.Player = EPlayer.YELLOW;
         }
-        Debug.Log("Day la count khi thay doi db" + playerCount);
         // Do something with the data in args.Snapshot
     }
 

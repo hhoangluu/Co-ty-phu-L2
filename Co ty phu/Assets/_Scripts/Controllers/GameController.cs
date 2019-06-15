@@ -15,25 +15,29 @@ public class GameController : MonoBehaviour
 
     private PlayerModel[] playerModels;
     private GameObject Me;
+    private GameObject[] playerO;
     private Map mapModel;
     GameInfoModel gameinfo;
     private EPlayer turn;
     private PlayerInfo meinfo = new PlayerInfo();
-    Firebase.Database.DatabaseReference Gamedbref = GameInfoModel.mDatabaseRef.Child("Game").Child(GameInfoModel.IdGame);
+    Firebase.Database.DatabaseReference Gamedbref;
     void Start()
     {
-        InitMe();
-       // playerModels = new PlayerModel[3];
+        GameInfoModel.IdGame = "-Lh9QfqIZn_7EIoH2atL";
+        gameinfo = new GameInfoModel();
+        Gamedbref = GameInfoModel.mDatabaseRef.Child("Game").Child(GameInfoModel.IdGame);
+        playerModels = new PlayerModel[3];
+        playerO = new GameObject[3];
+        
+        StartCoroutine(InitPlayerFromDB());
+         
 
         diceModel = Dice.GetComponent<DiceModel>();
-
         mapModel = Map.GetComponent<Map>();
-        diceModel.Init();
 
+        diceModel.Init();
         mapModel.Init();
-        gameinfo = new GameInfoModel();
-        
-        meinfo.Uid = meModel.Uid;
+
         turn = EPlayer.RED;
         //if (GameInfoModel.playerCount == 0)
         //{
@@ -41,7 +45,7 @@ public class GameController : MonoBehaviour
         //    Debug.Log("Hello");
         //}
         //else 
-        Gamedbref.Child("player").Child(meinfo.Uid).SetRawJsonValueAsync(JsonUtility.ToJson(meinfo));
+
 
         string json = JsonUtility.ToJson(meinfo);
         //  Debug.Log(json);
@@ -60,9 +64,9 @@ public class GameController : MonoBehaviour
             diceModel.PourDice();
 
         }
-        if (diceModel.IsPourDone() && !meModel.IsMove /*&& playerModel.Player == turn*/ )
+        if (diceModel.IsPourDone() && !meModel.IsMove && meModel.Player == turn)
         {
-            Debug.Log("Bat dau di chuyen");
+
             //  Debug.Log("Turn " + turn);
             meModel.Move(diceModel.Point, playerinfo);
 
@@ -71,10 +75,33 @@ public class GameController : MonoBehaviour
 
 
         }
+        for (int i = 0; i < GameInfoModel.playerCount - 1; i++)
+        {
+
+            if (diceModel.IsPourDone() && !playerModels[i].IsMove && playerModels[i].Player == turn)
+            {
+                Debug.Log("PlayerO Bat dau di chuyen");
+                //  Debug.Log("Turn " + turn);
+                playerModels[i].Move(diceModel.Point, playerinfo);
+
+                //StartCoroutine(Play());
+                NextTurn();
 
 
-        diceModel.DiceUpdate();
-        meModel.PlayerUpdate();
+            }
+
+        }
+
+
+        if (GameInfoModel.isGetCountDone == true)
+        {
+            diceModel.DiceUpdate();
+            meModel.PlayerUpdate();
+            for (int i = 0; i < GameInfoModel.playerCount - 1; i++)
+            {
+                playerModels[i].PlayerUpdate();
+            }
+        }
     }
 
 
@@ -329,7 +356,10 @@ public class GameController : MonoBehaviour
 
     private void InitMe()
     {
-        var count = 1;
+
+
+
+        var count = GameInfoModel.playerCount;
         //   diceCTL = Dice.GetComponent<DiceCTL>();
         //   playerCTL = Player.GetComponent<PlayerCTL>();
 
@@ -364,8 +394,54 @@ public class GameController : MonoBehaviour
             meModel.Init();
             meModel.Player = EPlayer.YELLOW;
         }
-
+        meModel.Uid = "jPcRxegAFLNC7Yt1sDs8Vmg0SYM2";
+        meinfo.Uid = meModel.Uid;
+        Gamedbref.Child("player").Child(meinfo.Uid).SetRawJsonValueAsync(JsonUtility.ToJson(meinfo));
     }
 
+    private void InitPlayer()
+    {
+        int count = GameInfoModel.playerCount;
+        Debug.Log("So luong cac player khac " + count);
+        if (count == 2)
+        {
+            playerO[0] = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Players/PlayerRed")) as GameObject;
+            playerModels[0] = playerO[0].GetComponent<PlayerModel>();
+            playerModels[0].Init();
+            playerModels[0].Player = EPlayer.RED;
+        }
+        else if (count == 3)
+        {
+            playerO[0] = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Players/PlayerBlue")) as GameObject;
+            playerModels[0] = playerO[0].GetComponent<PlayerModel>();
+            playerModels[0].Init();
+            playerModels[0].Player = EPlayer.BLUE;
+            playerO[1] = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Players/PlayerGreen")) as GameObject;
+            playerModels[1] = playerO[1].GetComponent<PlayerModel>();
+            playerModels[1].Init();
+            playerModels[1].Player = EPlayer.GREEN;
+        }
+        else if (count == 4)
+        {
+            playerO[0] = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Players/PlayerRed")) as GameObject;
+            playerModels[0] = playerO[0].GetComponent<PlayerModel>();
+            playerModels[0].Init();
+            playerModels[0].Player = EPlayer.RED;
+            playerO[1] = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Players/PlayerBlue")) as GameObject;
+            playerModels[1] = playerO[1].GetComponent<PlayerModel>();
+            playerModels[1].Init();
+            playerModels[1].Player = EPlayer.BLUE;
+            playerO[2] = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Players/PlayerGreen")) as GameObject;
+            playerModels[2] = playerO[2].GetComponent<PlayerModel>();
+            playerModels[2].Init();
+            playerModels[2].Player = EPlayer.GREEN;
+        }
+    }
+    IEnumerator InitPlayerFromDB()
+    {
+        yield return new WaitWhile(() => GameInfoModel.isGetCountDone == false);
+        InitMe();
+        InitPlayer();
+    }
 
 }

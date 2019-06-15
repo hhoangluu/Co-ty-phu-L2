@@ -150,7 +150,7 @@ public class LobbyModel : MonoBehaviour
             Debug.Log(room.idGame);
             GameObject roomGO = GameObject.Instantiate(roomprefaps) as GameObject;
             roomGO.transform.parent = canvas.transform;
-            Debug.Log(roomGO.transform.position.x + "<-x  y->" + roomGO.transform.position.y);
+         //   Debug.Log(roomGO.transform.position.x + "<-x  y->" + roomGO.transform.position.y);
             roomGO.transform.position = new Vector3(roomGO.transform.position.x + 3* count, transform.position.y);
         }
         canvas.active = true;
