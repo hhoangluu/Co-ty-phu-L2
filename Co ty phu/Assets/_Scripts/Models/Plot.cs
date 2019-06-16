@@ -57,6 +57,17 @@ public class Plot : MonoBehaviour
             }
         }
     }
+    void OnMouseOver()
+    {
+        if (Map.Current.Travel == -1)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Debug.Log("Da click vao" + transform.name);
+                Map.Current.Travel = int.Parse(transform.name);
+            }
+        }
+    }
     [ContextMenu("ChangePlotColor")]
     public void SetColor()
     {

@@ -31,7 +31,6 @@ public class GameInfoModel
 
         // Get the root reference location of the database.
         mDatabaseRef = FirebaseDatabase.DefaultInstance.RootReference;
-        GetCount();
         
 
     }
@@ -99,9 +98,10 @@ public class GameInfoModel
         
         Debug.Log("Day la count khi thay doi db " + playerCount);
         GameObject p = null;
-        PlayerModel pModel;
+        PlayerModel pModel = null;
         if (playerCount == 0)
         {
+
             p = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Players/PlayerRed")) as GameObject;
             Debug.Log("Khoi tao thanh cong player 1");
             pModel = p.GetComponent<PlayerModel>();
@@ -132,6 +132,8 @@ public class GameInfoModel
             pModel.Init();
             pModel.Player = EPlayer.YELLOW;
         }
+        GameController.instance.playerO[playerCount - 2] = p;
+        GameController.instance.playerModels[playerCount - 2] = pModel;
         // Do something with the data in args.Snapshot
     }
 

@@ -18,13 +18,13 @@ public class PlayerModel : MonoBehaviour
 
     private bool _isMove;
 
-
+    public int Countdown { get; set; }
     public float Money { get => _money; set => _money = value; }
     public int Card { get => _card; set => _card = value; }
     public int Position { get => _position; set => _position = value; }
     public bool IsMove { get => _isMove; set => _isMove = value; }
     public EPlayer Player { get => _player; set => _player = value; }
-    public EPlayer player;
+    public int Travel { get; private set; }
 
     public string Uid;
 
@@ -34,12 +34,16 @@ public class PlayerModel : MonoBehaviour
         Uid = LoginModel.userID;
         _isMove = false;
         _position = 0;
-        _player = player;
+        _player = EPlayer.RED;
         Money = 2000;
         _card = 0;
+        Countdown = 0;
+        GameInfoModel.mDatabaseRef.Child("Game").Child(GameInfoModel.IdGame).Child("player").Child(Uid)
+      .ValueChanged += HandlePlayerChange;
+
     }
 
-    public void Move(int point, PlayerInfo playerInfo)
+    public void Move(int point)
     {
         //  GetComponent<Animator>().enabled = true;
         _isMove = true;
@@ -121,9 +125,37 @@ public class PlayerModel : MonoBehaviour
 
     public void GetAllPlayer()
     {
-        GameInfoModel.mDatabaseRef.Child(GameInfoModel.IdGame).Child("playercount")
+        GameInfoModel.mDatabaseRef.Child("Game").Child(GameInfoModel.IdGame).Child("player").GetValueAsync()
+           .ContinueWith(task =>
+           {
+               if (task.IsFaulted)
+               {
+                   Debug.Log("Errrrrrrrrrrrr");
+               }
+               else if (task.IsCompleted)
+               {
+                   int count = GameInfoModel.playerCount - 1;
+                   DataSnapshot snapshot = task.Result;
+                   Debug.Log("playercount Get all" + snapshot.ChildrenCount);
+                   foreach (var item in snapshot.Children)
+                   {
+                       Debug.Log("item.key.to string" + item.Key.ToString()+ "count" + count);
+                       if (item.Key.ToString() != LoginModel.userID)
+                       {
+                       GameController.instance.playerModels[count].Uid =  item.Key.ToString();
+                       
+                       Debug.Log("item.key.to string" +item.Key.ToString());
+
+                       }
+                       count--;
+                      
+                   }
+               }
+           });
+         GameInfoModel.mDatabaseRef.Child(GameInfoModel.IdGame).Child("playercount")
       .ValueChanged += HandleValueChanged;
     }
+    
 
     void HandleValueChanged(object sender, ValueChangedEventArgs args)
     {
@@ -133,6 +165,7 @@ public class PlayerModel : MonoBehaviour
             Debug.LogError(args.DatabaseError.Message);
             return;
         }
+        
         DataSnapshot snapshot = args.Snapshot;
 
         count = int.Parse(snapshot.Value.ToString());
@@ -172,4 +205,33 @@ public class PlayerModel : MonoBehaviour
         }
 
     }
+
+    public void Push()
+    {
+        PlayerInfo info = new PlayerInfo();
+        info.Uid = Uid;
+        info.Money = _money;
+        info.Position = _position;
+        info.Countdown = Countdown;
+        info.Travel = Travel;
+        GameInfoModel.mDatabaseRef.Child("Game").Child(GameInfoModel.IdGame).Child("player").Child(Uid).SetRawJsonValueAsync(JsonUtility.ToJson(info));
+    }
+
+    void HandlePlayerChange(object sender, ValueChangedEventArgs args)
+    {
+        
+        if (args.DatabaseError != null)
+        {
+            Debug.LogError(args.DatabaseError.Message);
+            return;
+        }
+
+        DataSnapshot snapshot = args.Snapshot;
+        Uid = snapshot.Child("Uid").Value.ToString();
+        _money = float.Parse(snapshot.Child("Money").Value.ToString());
+        _position = int.Parse(snapshot.Child("Position").Value.ToString());
+        Countdown = int.Parse(snapshot.Child("Countdown").Value.ToString());
+
+    }
+
 }

@@ -5,25 +5,33 @@ using UnityEngine;
 public class GameController : MonoBehaviour
 {
 
+    public static GameController instance = null;
     public PlayerInfo playerinfo;
     public GameObject Dice;
 
-    public GameObject Map;
+    //public GameObject MapO;
     public GameObject[] player;
-    private DiceModel diceModel;
-    private PlayerModel meModel;
+    public DiceModel diceModel;
+    public PlayerModel meModel;
 
-    private PlayerModel[] playerModels;
-    private GameObject Me;
-    private GameObject[] playerO;
-    private Map mapModel;
+    public PlayerModel[] playerModels;
+    public static GameObject Me;
+    public GameObject[] playerO;
     GameInfoModel gameinfo;
-    private EPlayer turn;
-    private PlayerInfo meinfo = new PlayerInfo();
+    public EPlayer turn;
+    public PlayerInfo meinfo = new PlayerInfo();
     Firebase.Database.DatabaseReference Gamedbref;
+
+    public bool IsInitDone { get; private set; }
+
+    private void Awake()
+    {
+        instance = this;
+    }
+
     void Start()
     {
-        GameInfoModel.IdGame = "-Lh9QfqIZn_7EIoH2atL";
+       // GameInfoModel.IdGame = "-Lh9QfqIZn_7EIoH2atL";
         gameinfo = new GameInfoModel();
         Gamedbref = GameInfoModel.mDatabaseRef.Child("Game").Child(GameInfoModel.IdGame);
         playerModels = new PlayerModel[3];
@@ -33,10 +41,10 @@ public class GameController : MonoBehaviour
          
 
         diceModel = Dice.GetComponent<DiceModel>();
-        mapModel = Map.GetComponent<Map>();
+        //Map.Current = MapO.GetComponent<Map>();
 
         diceModel.Init();
-        mapModel.Init();
+        //Map.Current.Init();
 
         turn = EPlayer.RED;
         //if (GameInfoModel.playerCount == 0)
@@ -58,20 +66,25 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+       // Map.Current.ShowWorldCup();
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Debug.Log("Turn " + turn);
             diceModel.PourDice();
+           
 
         }
-        if (diceModel.IsPourDone() && !meModel.IsMove && meModel.Player == turn)
+        if (diceModel.IsPourDone() && !meModel.IsMove && meModel.Player == turn )
         {
+            if (meModel.Countdown == 0)
+            {
+                meModel.Move(diceModel.Point);
 
+            }
             //  Debug.Log("Turn " + turn);
-            meModel.Move(diceModel.Point, playerinfo);
-
             StartCoroutine(Play());
-            NextTurn();
+
+
 
 
         }
@@ -80,9 +93,12 @@ public class GameController : MonoBehaviour
 
             if (diceModel.IsPourDone() && !playerModels[i].IsMove && playerModels[i].Player == turn)
             {
-                Debug.Log("PlayerO Bat dau di chuyen");
-                //  Debug.Log("Turn " + turn);
-                playerModels[i].Move(diceModel.Point, playerinfo);
+                if (playerModels[i].Countdown == 0)
+                {
+                    playerModels[i].Move(diceModel.Point);
+
+                }
+                
 
                 //StartCoroutine(Play());
                 NextTurn();
@@ -93,7 +109,7 @@ public class GameController : MonoBehaviour
         }
 
 
-        if (GameInfoModel.isGetCountDone == true)
+        if (IsInitDone == true)
         {
             diceModel.DiceUpdate();
             meModel.PlayerUpdate();
@@ -115,7 +131,7 @@ public class GameController : MonoBehaviour
                 turn = EPlayer.BLUE;
                 break;
             case EPlayer.BLUE:
-                turn = EPlayer.GREEN;
+                turn = EPlayer.RED;
                 break;
             case EPlayer.GREEN:
                 turn = EPlayer.YELLOW;
@@ -130,21 +146,51 @@ public class GameController : MonoBehaviour
     void Deal()
     {
         Debug.Log("Đang ở ô đất số " + meModel.Position);
-
-        mapModel.ShowDeal(meModel.Position);
+        if (meModel.Player == turn)
+        {
+            Map.Current.ShowDeal(meModel.Position);
+            NextTurn();
+        }
+        
     }
 
     IEnumerator Play()
     {
         yield return new WaitWhile(() => meModel.IsMove == true);
         //   playerModel.GetComponent<Animator>().enabled = false;
+        subtractMoney(meModel.Position);
         Deal();
+        meModel.Push();
+        for(int i=0; i< GameInfoModel.playerCount-2; i++)
+        {
+            playerModels[i].Push();
+        }
+    }
+
+    public void subtractMoney(int pos)
+    {
+        if(meModel.Player != Map.Current.Ar_BuidingModel[pos].Player)
+        {
+            meModel.Money -= Map.Current.Ar_BuidingModel[pos].Fees;
+            for (int i=0; i < GameInfoModel.playerCount -2; i++)
+            {
+                if (playerModels[i].Player == Map.Current.Ar_BuidingModel[pos].Player)
+                {
+                    playerModels[i].Money += Map.Current.Ar_BuidingModel[pos].Fees;
+                    
+                    for (int j = 0; i < GameInfoModel.playerCount - 2; i++)
+                    {
+                        playerModels[j].Push();
+                    }
+                }
+            }
+        }
     }
 
     public void BuyBuilding1()  //Nhà lv1
     {
-
-        if (mapModel.Ar_BuidingModel[meModel.Position].Level == 0
+        Debug.Log("Map.Current.Ar_BuidingModel[meModel.Position].level = " + Map.Current.Ar_BuidingModel[meModel.Position].Level);
+        if (Map.Current.Ar_BuidingModel[meModel.Position].Level == 0
             && meModel.Position != 0
             && meModel.Position != 2
             && meModel.Position != 4
@@ -162,23 +208,22 @@ public class GameController : MonoBehaviour
             )
         {
             Debug.Log("playerModel.Position: " + meModel.Position + " lv1");
-            mapModel.InitBuilding1(meModel.Position, "Red");
-            mapModel.Ar_BuidingModel[meModel.Position].Level++;
-            meModel.Money -= mapModel.Ar_BuidingModel[meModel.Position].buy_Price;
-            mapModel.Ar_BuidingModel[meModel.Position].sell_Price = mapModel.Ar_BuidingModel[meModel.Position].Price * 2f;
-            mapModel.Ar_BuidingModel[meModel.Position].buy_Price = mapModel.Ar_BuidingModel[meModel.Position].Price;
-
+            //Map.Current.InitBuilding1(meModel.Position, meModel.Player.ToString());
+            Map.Current.Ar_BuidingModel[meModel.Position].Level = 1;
+            Map.Current.Ar_BuidingModel[meModel.Position].Fees = Map.Current.Ar_BuidingModel[meModel.Position].Price * 0.5f;
+            meModel.Money -= Map.Current.Ar_BuidingModel[meModel.Position].Price;
+            meModel.Push();
             Debug.Log("Money = " + meModel.Money);
-
-            Debug.Log("sell_Price = " + mapModel.Ar_BuidingModel[meModel.Position].sell_Price);
-            Debug.Log("buy_Price = " + mapModel.Ar_BuidingModel[meModel.Position].buy_Price);
+            Map.Current.pushBuilding(meModel.Position);
         }
-        mapModel.hideDeal(meModel.Position);
+        Map.Current.hideDeal(meModel.Position);
+        Map.Current.Ar_BuidingModel[meModel.Position].Level = 0;
+
     }
 
     public void BuyBuilding2()  //Nhà lv2
     {
-        if (mapModel.Ar_BuidingModel[meModel.Position].Level < 2
+        if (Map.Current.Ar_BuidingModel[meModel.Position].Level < 2
             && meModel.Position != 0
             && meModel.Position != 2
             && meModel.Position != 4
@@ -195,28 +240,41 @@ public class GameController : MonoBehaviour
             && meModel.Position != 30
             )
         {
-            Debug.Log("playerModel.Position: " + meModel.Position + " lv2");
+            if (Map.Current.Ar_BuidingModel[meModel.Position].Level == 0)
+            {
+                //Map.Current.InitBuilding1(meModel.Position, meModel.Player.ToString());
+                //Map.Current.InitBuilding2(meModel.Position, meModel.Player.ToString());
+                Map.Current.Ar_BuidingModel[meModel.Position].Level = 2;
+                meModel.Money -= Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f;
+                meModel.Money -= Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f * 1.5f;
+                meModel.Push();
+                Map.Current.Ar_BuidingModel[meModel.Position].Fees = Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f;
 
-            mapModel.InitBuilding2(meModel.Position, "Red");
-            mapModel.Ar_BuidingModel[meModel.Position].Level++;
+                Map.Current.pushBuilding(meModel.Position);
+                Map.Current.Ar_BuidingModel[meModel.Position].Level = 0;
 
-            mapModel.Ar_BuidingModel[meModel.Position].Level++;
-            meModel.Money -= mapModel.Ar_BuidingModel[meModel.Position].buy_Price;
-            mapModel.Ar_BuidingModel[meModel.Position].sell_Price = mapModel.Ar_BuidingModel[meModel.Position].Price * 2f;
-            mapModel.Ar_BuidingModel[meModel.Position].buy_Price = mapModel.Ar_BuidingModel[meModel.Position].Price;
+            }
+            else
+            {
+                //Map.Current.InitBuilding2(meModel.Position, meModel.Player.ToString());
+                Map.Current.Ar_BuidingModel[meModel.Position].Level = 2;
+                meModel.Money -= Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f * 1.5f;
+                meModel.Push();
+                Map.Current.Ar_BuidingModel[meModel.Position].Fees = Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f;
+                Map.Current.pushBuilding(meModel.Position);
+                Map.Current.Ar_BuidingModel[meModel.Position].Level = 1;
+            }
 
             Debug.Log("Money = " + meModel.Money);
 
-            Debug.Log("sell_Price = " + mapModel.Ar_BuidingModel[meModel.Position].sell_Price);
-            Debug.Log("buy_Price = " + mapModel.Ar_BuidingModel[meModel.Position].buy_Price);
 
         }
-        mapModel.hideDeal(meModel.Position);
+        Map.Current.hideDeal(meModel.Position);
     }
 
     public void BuyBuilding3()  //Nhà lv3
     {
-        if (mapModel.Ar_BuidingModel[meModel.Position].Level < 3
+        if (Map.Current.Ar_BuidingModel[meModel.Position].Level < 3
             && meModel.Position != 0
             && meModel.Position != 2
             && meModel.Position != 4
@@ -233,25 +291,47 @@ public class GameController : MonoBehaviour
             && meModel.Position != 30
             )
         {
-            Debug.Log("playerModel.Position: " + meModel.Position + " lv3");
+            if (Map.Current.Ar_BuidingModel[meModel.Position].Level == 0)
+            {
+                Map.Current.Ar_BuidingModel[meModel.Position].Level = 3;
+                meModel.Money -= Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f;
+                meModel.Money -= Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f * 1.5f;
+                meModel.Money -= Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f * 1.5f * 1.5f;
 
-            mapModel.InitBuilding3(meModel.Position, "Red");
-            mapModel.Ar_BuidingModel[meModel.Position].Level++;
-            meModel.Money -= mapModel.Ar_BuidingModel[meModel.Position].buy_Price;
-            mapModel.Ar_BuidingModel[meModel.Position].sell_Price = mapModel.Ar_BuidingModel[meModel.Position].Price * 2f;
-            mapModel.Ar_BuidingModel[meModel.Position].buy_Price = mapModel.Ar_BuidingModel[meModel.Position].Price;
+                meModel.Push();               
+                Map.Current.Ar_BuidingModel[meModel.Position].Fees = Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f * 1.5f;
+                Map.Current.pushBuilding(meModel.Position);
+                Map.Current.Ar_BuidingModel[meModel.Position].Level = 0;
+            }
+            else if(Map.Current.Ar_BuidingModel[meModel.Position].Level == 1)
+            {
+                Map.Current.Ar_BuidingModel[meModel.Position].Level = 3;
+                meModel.Money -= Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f * 1.5f;
+                meModel.Money -= Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f * 1.5f * 1.5f;
+                meModel.Push();               
+                Map.Current.Ar_BuidingModel[meModel.Position].Fees = Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f * 1.5f;
+                Map.Current.pushBuilding(meModel.Position);
+                Map.Current.Ar_BuidingModel[meModel.Position].Level = 1;
+            }
+            else
+            {
+                Map.Current.Ar_BuidingModel[meModel.Position].Level = 3;
+                meModel.Money -= Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f * 1.5f * 1.5f;
+                Map.Current.Ar_BuidingModel[meModel.Position].Fees = Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f * 1.5f;
+                Map.Current.pushBuilding(meModel.Position);
+                Map.Current.Ar_BuidingModel[meModel.Position].Level = 2;
+            }
+
 
             Debug.Log("Money = " + meModel.Money);
 
-
-            Debug.Log("sell_Price = " + mapModel.Ar_BuidingModel[meModel.Position].sell_Price);
-            Debug.Log("buy_Price = " + mapModel.Ar_BuidingModel[meModel.Position].buy_Price);
         }
-        mapModel.hideDeal(meModel.Position);
+        Map.Current.hideDeal(meModel.Position);
     }
     public void BuyWonders()    //Xây kì quan
     {
-        if (mapModel.Ar_BuidingModel[meModel.Position].Level == 3
+        Debug.Log("lol.................");
+        if (Map.Current.Ar_BuidingModel[meModel.Position].Level == 3
             && meModel.Position != 0
             && meModel.Position != 2
             && meModel.Position != 4
@@ -271,87 +351,112 @@ public class GameController : MonoBehaviour
             //Hủy nhà 1 2 3
             //...............
             //
+            meModel.Money -= Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f * 1.5f * 1.5f *1.5f;
+            meModel.Push();
+            Map.Current.Ar_BuidingModel[meModel.Position].Level = 4;
             Debug.Log("playerModel.Position: " + meModel.Position + " kq");
-            mapModel.InitWonders(meModel.Position, "Red");
         }
-        mapModel.hideDeal(meModel.Position);
+        Map.Current.pushBuilding(meModel.Position);
+        Map.Current.hideDeal(meModel.Position);
     }
     public void Minigame()  //Minigame
     {
-        if (mapModel.Ar_BuidingModel[meModel.Position].Level == 3
+        if (Map.Current.Ar_BuidingModel[meModel.Position].Level == 3
             && meModel.Position == 2
             )
         {
-            //mapModel.InitWonders(playerModel.Position, "Red");
+            //Map.Current.InitWonders(playerModel.Position, meModel.Player.ToString());
         }
-        mapModel.hideDeal(meModel.Position);
+        Map.Current.hideDeal(meModel.Position);
     }
-    public void Prison()    //Cơ hội
+    public void PrisonWait3Turn()    //Vào tù
     {
-        if (mapModel.Ar_BuidingModel[meModel.Position].Level == 3
-            && meModel.Position == 8
-            )
+        if (meModel.Countdown == 0 && meModel.Position == 8 && meModel.Player == turn)
         {
-            //mapModel.InitWonders(playerModel.Position, "Red");
+
+            meModel.Countdown = 0;
+           
         }
-        mapModel.hideDeal(meModel.Position);
+        else if (meModel.Countdown != 0 && meModel.Player == turn)
+        {
+            meModel.Countdown--;
+           if (diceModel.IsDouble == true)
+            {
+                meModel.Countdown = 0;
+            }
+
+        }
+        //for (int i = 0; i < GameInfoModel.playerCount - 1; i++)
+        //{
+        //    if (playerModels[i].Countdown == 0 && playerModels[i].Position == 8 && playerModels[i].player == turn)
+        //    {
+        //        playerModels[i].Countdown = 3;
+        //    }
+        //    else if (playerModels[i].Countdown != 0)
+        //    {
+        //        playerModels[i].Countdown--;
+        //    }
+        //}
+        Debug.Log("me model Countdown " + meModel.Countdown);
+        Map.Current.hideDeal(meModel.Position);
     }
+
+
     public void WorldCup()    //WorldCup
     {
-        if (mapModel.Ar_BuidingModel[meModel.Position].Level == 3
-            && meModel.Position == 16
-            )
+        if (meModel.Position == 16)
         {
-            //mapModel.InitWonders(playerModel.Position, "Red");
+
         }
-        mapModel.hideDeal(meModel.Position);
+        Map.Current.hideDeal(meModel.Position);
     }
-    public void Travle()    //Du lịch
+   
+    public void Travel()    //Du lịch
     {
-        if (mapModel.Ar_BuidingModel[meModel.Position].Level == 3
+        if (Map.Current.Ar_BuidingModel[meModel.Position].Level == 3
             && meModel.Position == 24
             )
         {
-            //mapModel.InitWonders(playerModel.Position, "Red");
+            //Map.Current.InitWonders(playerModel.Position, meModel.Player.ToString());
         }
-        mapModel.hideDeal(meModel.Position);
+        Map.Current.hideDeal(meModel.Position);
     }
     public void HonDao()    //địa điểm du lịch
     {
-        if ((mapModel.Ar_BuidingModel[meModel.Position].Level == 3 && meModel.Position == 4)
-            || (mapModel.Ar_BuidingModel[meModel.Position].Level == 3 && meModel.Position == 9)
-            || (mapModel.Ar_BuidingModel[meModel.Position].Level == 3 && meModel.Position == 14)
-            || (mapModel.Ar_BuidingModel[meModel.Position].Level == 3 && meModel.Position == 18)
-            || (mapModel.Ar_BuidingModel[meModel.Position].Level == 3 && meModel.Position == 25)
+        if ((Map.Current.Ar_BuidingModel[meModel.Position].Level == 3 && meModel.Position == 4)
+            || (Map.Current.Ar_BuidingModel[meModel.Position].Level == 3 && meModel.Position == 9)
+            || (Map.Current.Ar_BuidingModel[meModel.Position].Level == 3 && meModel.Position == 14)
+            || (Map.Current.Ar_BuidingModel[meModel.Position].Level == 3 && meModel.Position == 18)
+            || (Map.Current.Ar_BuidingModel[meModel.Position].Level == 3 && meModel.Position == 25)
             )
         {
-            //mapModel.InitWonders(playerModel.Position, "Red");
+            //Map.Current.InitWonders(playerModel.Position, meModel.Player.ToString());
         }
-        mapModel.hideDeal(meModel.Position);
+        Map.Current.hideDeal(meModel.Position);
     }
     public void Chance()    //Cơ hội
     {
-        if ((mapModel.Ar_BuidingModel[meModel.Position].Level == 3 && meModel.Position == 4)
-            || (mapModel.Ar_BuidingModel[meModel.Position].Level == 3 && meModel.Position == 12)
-            || (mapModel.Ar_BuidingModel[meModel.Position].Level == 3 && meModel.Position == 20)
-            || (mapModel.Ar_BuidingModel[meModel.Position].Level == 3 && meModel.Position == 28)
+        if ((Map.Current.Ar_BuidingModel[meModel.Position].Level == 3 && meModel.Position == 4)
+            || (Map.Current.Ar_BuidingModel[meModel.Position].Level == 3 && meModel.Position == 12)
+            || (Map.Current.Ar_BuidingModel[meModel.Position].Level == 3 && meModel.Position == 20)
+            || (Map.Current.Ar_BuidingModel[meModel.Position].Level == 3 && meModel.Position == 28)
             )
         {
-            //mapModel.InitWonders(playerModel.Position, "Red");
+            //Map.Current.InitWonders(playerModel.Position, meModel.Player.ToString());
         }
-        mapModel.hideDeal(meModel.Position);
+        Map.Current.hideDeal(meModel.Position);
     }
     public void Thue()    //Thuế
     {
-        if ((mapModel.Ar_BuidingModel[meModel.Position].Level == 3 && meModel.Position == 4)
-            || (mapModel.Ar_BuidingModel[meModel.Position].Level == 3 && meModel.Position == 12)
-            || (mapModel.Ar_BuidingModel[meModel.Position].Level == 3 && meModel.Position == 20)
-            || (mapModel.Ar_BuidingModel[meModel.Position].Level == 3 && meModel.Position == 28)
+        if ((Map.Current.Ar_BuidingModel[meModel.Position].Level == 3 && meModel.Position == 4)
+            || (Map.Current.Ar_BuidingModel[meModel.Position].Level == 3 && meModel.Position == 12)
+            || (Map.Current.Ar_BuidingModel[meModel.Position].Level == 3 && meModel.Position == 20)
+            || (Map.Current.Ar_BuidingModel[meModel.Position].Level == 3 && meModel.Position == 28)
             )
         {
-            //mapModel.InitWonders(playerModel.Position, "Red");
+            //Map.Current.InitWonders(playerModel.Position, meModel.Player.ToString());
         }
-        mapModel.hideDeal(meModel.Position);
+        Map.Current.hideDeal(meModel.Position);
     }
 
     private void InitMe()
@@ -394,13 +499,15 @@ public class GameController : MonoBehaviour
             meModel.Init();
             meModel.Player = EPlayer.YELLOW;
         }
-        meModel.Uid = "jPcRxegAFLNC7Yt1sDs8Vmg0SYM2";
+      //  meModel.Uid = "jPcRxegAFLNC7Yt1sDs8Vmg0SYM2";
         meinfo.Uid = meModel.Uid;
         Gamedbref.Child("player").Child(meinfo.Uid).SetRawJsonValueAsync(JsonUtility.ToJson(meinfo));
+        IsInitDone = true;
     }
 
     private void InitPlayer()
     {
+       
         int count = GameInfoModel.playerCount;
         Debug.Log("So luong cac player khac " + count);
         if (count == 2)
@@ -412,14 +519,14 @@ public class GameController : MonoBehaviour
         }
         else if (count == 3)
         {
-            playerO[0] = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Players/PlayerBlue")) as GameObject;
+            playerO[0] = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Players/PlayerRed")) as GameObject;
             playerModels[0] = playerO[0].GetComponent<PlayerModel>();
             playerModels[0].Init();
-            playerModels[0].Player = EPlayer.BLUE;
-            playerO[1] = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Players/PlayerGreen")) as GameObject;
+            playerModels[0].Player = EPlayer.RED;
+            playerO[1] = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Players/PlayerBlue")) as GameObject;
             playerModels[1] = playerO[1].GetComponent<PlayerModel>();
             playerModels[1].Init();
-            playerModels[1].Player = EPlayer.GREEN;
+            playerModels[1].Player = EPlayer.BLUE;
         }
         else if (count == 4)
         {
@@ -436,12 +543,15 @@ public class GameController : MonoBehaviour
             playerModels[2].Init();
             playerModels[2].Player = EPlayer.GREEN;
         }
+        meModel.GetAllPlayer();
     }
     IEnumerator InitPlayerFromDB()
     {
         yield return new WaitWhile(() => GameInfoModel.isGetCountDone == false);
+
         InitMe();
         InitPlayer();
+        
     }
 
 }

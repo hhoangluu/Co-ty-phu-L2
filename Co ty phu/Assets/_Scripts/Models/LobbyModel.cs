@@ -54,10 +54,14 @@ public class LobbyModel : MonoBehaviour
         info.GetCount();
         string json = JsonUtility.ToJson(info);
         Debug.Log(json);
-        if (GameInfoModel.playerCount != 4)
+        if (GameInfoModel.playerCount < 4)
         {
             SceneManager.LoadScene(3);
 
+        }
+        else
+        {
+            Debug.Log("Phong day");
         }
         
     }

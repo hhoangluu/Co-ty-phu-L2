@@ -5,7 +5,6 @@ using UnityEngine;
 public class BaseItem : MonoBehaviour
 {
 
-    [SerializeField]
     private EPlayer _player;
     public EPlayer Player
     {

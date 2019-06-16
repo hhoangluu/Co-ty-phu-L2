@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Firebase.Database;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Map : MonoBehaviour
 {
-    
+
     public static Map Current;
     public GameObject plotVerticalPrefap;
     public GameObject plotHorizontalPrefap;
@@ -20,10 +21,28 @@ public class Map : MonoBehaviour
     public GameObject DealHonDao;
     public GameObject DealThue;
     public GameObject DealStart;
+    public GameObject ThongBao;
 
     public Building[] Ar_BuidingModel;
 
+    //public Building[] Ar_BuidingModel;
+
+
+    public int Travel;
     public List<BaseItem> items;
+
+
+    public void pushBuilding(int pos)
+    {
+        BuildingInfo temp = new BuildingInfo();
+        temp.Level = Ar_BuidingModel[pos].Level;
+        temp.Fees = Ar_BuidingModel[pos].Fees;
+        temp.Owner = Ar_BuidingModel[pos].Player.ToString();
+        temp.Position = pos;
+
+        GameInfoModel.mDatabaseRef.Child("Game").Child(GameInfoModel.IdGame).Child("Buildings").Child(pos.ToString()).SetRawJsonValueAsync(JsonUtility.ToJson(temp));
+
+    }
 
 
     private float plot_size = -1;
@@ -65,9 +84,153 @@ public class Map : MonoBehaviour
         Current = this;
         Current.items = new List<BaseItem>();
         Current.Ar_BuidingModel = new Building[32];
+        Travel = -2;
+        var refs = FirebaseDatabase.DefaultInstance
+            .GetReference("Game").Child(GameInfoModel.IdGame).Child("player");
+
+        refs.ValueChanged += HandleTravelChange;
+       
+      
+        float jump = 100;
+        float org = 1000;
         for (int i = 0; i < 32; i++)
         {
+            FirebaseDatabase.DefaultInstance
+            .GetReference("Game").Child(GameInfoModel.IdGame).Child("Buildings").Child(i.ToString())
+            .ValueChanged += HandleValueChanged;
             Current.Ar_BuidingModel[i] = new Building(i);
+
+            if (i == 0)
+            {
+                Current.Ar_BuidingModel[i].Cityname = "XUẤT PHÁT";
+            }
+            else if (i == 2)
+            {
+                Current.Ar_BuidingModel[i].Cityname = "MINI GAME";
+            }
+            else if (i == 8)
+            {
+                Current.Ar_BuidingModel[i].Cityname = "HOANG ĐẢO";
+            }
+            else if (i == 16)
+            {
+                Current.Ar_BuidingModel[i].Cityname = "WORLD CUOP";
+            }
+            else if (i == 24)
+            {
+                Current.Ar_BuidingModel[i].Cityname = "DU LỊCH";
+            }
+            else if (i == 30)
+            {
+                Current.Ar_BuidingModel[i].Cityname = "THUẾ";
+            }
+            else if (i == 12 || i == 20 || i == 28)
+            {
+                Current.Ar_BuidingModel[i].Cityname = "CƠ HỘI";
+            }
+            else if (i == 4 || i == 9 || i == 14 || i == 18 || i == 25)
+            {
+                if (i == 4)
+                {
+                    Current.Ar_BuidingModel[i].Cityname = "OKINAWA";
+                }
+                else if (i == 9)
+                {
+                    Current.Ar_BuidingModel[i].Cityname = "BALI";
+                }
+                else if (i == 14)
+                {
+                    Current.Ar_BuidingModel[i].Cityname = "HAWAII";
+                }
+                else if (i == 18)
+                {
+                    Current.Ar_BuidingModel[i].Cityname = "PHUKET";
+                }
+                else
+                {
+                    Current.Ar_BuidingModel[i].Cityname = "TAHITI";
+                }
+                Current.Ar_BuidingModel[i].Price = org + jump;
+                org += jump;
+            }
+            else
+            {
+
+                if (i == 1)
+                {
+                    Current.Ar_BuidingModel[i].Cityname = "OKINAWA";
+                }
+                else if (i == 3)
+                {
+                    Current.Ar_BuidingModel[i].Cityname = "BALI";
+                }
+                else if (i == 5)
+                {
+                    Current.Ar_BuidingModel[i].Cityname = "CAIPRO";
+                }
+                else if (i == 6)
+                {
+                    Current.Ar_BuidingModel[i].Cityname = "PHUKET";
+                }
+                else if (i == 6)
+                {
+                    Current.Ar_BuidingModel[i].Cityname = "SEOUL";
+                }
+                else if (i == 6)
+                {
+                    Current.Ar_BuidingModel[i].Cityname = "PHUKET";
+                }
+                else if (i == 6)
+                {
+                    Current.Ar_BuidingModel[i].Cityname = "SINGAPORE";
+                }
+                else if (i == 6)
+                {
+                    Current.Ar_BuidingModel[i].Cityname = "SAOPAULO";
+                }
+                else if (i == 6)
+                {
+                    Current.Ar_BuidingModel[i].Cityname = "PRAGUE";
+                }
+                else if (i == 6)
+                {
+                    Current.Ar_BuidingModel[i].Cityname = "BERLIN";
+                }
+                else if (i == 6)
+                {
+                    Current.Ar_BuidingModel[i].Cityname = "MOSCOW";
+                }
+                else if (i == 6)
+                {
+                    Current.Ar_BuidingModel[i].Cityname = "GENEVA";
+                }
+                else if (i == 6)
+                {
+                    Current.Ar_BuidingModel[i].Cityname = "ROME";
+                }
+                else if (i == 6)
+                {
+                    Current.Ar_BuidingModel[i].Cityname = "LONDON";
+                }
+                else if (i == 6)
+                {
+                    Current.Ar_BuidingModel[i].Cityname = "PARIS";
+                }
+                else if (i == 6)
+                {
+                    Current.Ar_BuidingModel[i].Cityname = "NEW YORK";
+                }
+                else if (i == 6)
+                {
+                    Current.Ar_BuidingModel[i].Cityname = "PHUKET";
+                }
+                else
+                {
+                    Current.Ar_BuidingModel[i].Cityname = "HÀ NỘI";
+                }
+                Current.Ar_BuidingModel[i].Price = org + jump;
+                org += jump;
+            }
         }
     }
     public Vector3 basePosition;
@@ -91,16 +254,31 @@ public class Map : MonoBehaviour
         //items = new List<BaseItem>();
         GameObject Building1 = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Items/Building1-Red")) as GameObject;
         Building1.transform.parent = this.transform.GetChild(1);
+        Building1.name = id.ToString();
         Building b1 = Building1.GetComponent<Building>();
         items.Add(b1);
         b1.SetBuilding1LocationById(id);
     }
+    public void deleteBuilding(int id)
+    {
+        GameObject Building = null;
+        for (int i = 0; i < items.Count; i++)
+        {
 
+            Building = transform.GetChild(1).GetChild(i).gameObject;
+            if (Building.name == id.ToString())
+            {
+
+                Destroy(Building);
+            }
+        }
+    }
     public void InitBuilding2(int id, string color)
     {
 
         GameObject Building2 = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Items/Building2-Red")) as GameObject;
         Building2.transform.parent = this.transform.GetChild(1);
+        Building2.name = id.ToString();
         Building b2 = Building2.GetComponent<Building>();
         items.Add(b2);
         b2.SetBuilding2LocationById(id);
@@ -110,6 +288,7 @@ public class Map : MonoBehaviour
         //items = new List<BaseItem>();
         GameObject Building3 = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Items/Building3-Red")) as GameObject;
         Building3.transform.parent = this.transform.GetChild(1);
+        Building3.name = id.ToString();
         Building b3 = Building3.GetComponent<Building>();
         items.Add(b3);
         b3.SetBuilding3LocationById(id);
@@ -120,6 +299,7 @@ public class Map : MonoBehaviour
         //items = new List<BaseItem>();
         GameObject Building3 = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Items/" + id + "-" + color)) as GameObject;
         Building3.transform.parent = this.transform.GetChild(1);
+        Building3.name = id.ToString();
         Building b3 = Building3.GetComponent<Building>();
         items.Add(b3);
         b3.SetWondersLocationById(id);
@@ -149,10 +329,10 @@ public class Map : MonoBehaviour
 
 
             c.transform.parent = this.transform.GetChild(0);
-          //  c.GetComponent<Collider>().tag = "Plot";
+            //  c.GetComponent<Collider>().tag = "Plot";
             _plots[i] = c.GetComponentInChildren<Plot>();
             _plots[i].name = "plot " + i;
-            
+
             // set color for plot
             if (i == 1 || i == 3)
             {
@@ -200,7 +380,7 @@ public class Map : MonoBehaviour
         }
     }
 
-   
+
 
     public Vector3 CanculatePosition(int i)
     {
@@ -209,7 +389,7 @@ public class Map : MonoBehaviour
         float SIZEBig = bigPlotPrefap.GetComponent<Plot>().SIZEBig;
 
         //Debug.Log(SIZE);
-        Vector3 base1 = new Vector3(basePosition.x , 0, basePosition.z);
+        Vector3 base1 = new Vector3(basePosition.x, 0, basePosition.z);
         Vector3 base2 = new Vector3(basePosition.x, 0, basePosition.z + 8 * SIZE);
         Vector3 base3 = new Vector3(basePosition.x + 8 * SIZE, 0, 3.5f * SIZE + 0.5f * SIZEBig);
         Vector3 base4 = new Vector3(3.5f * SIZE + 0.5f * SIZEBig, 0, basePosition.z);
@@ -221,7 +401,7 @@ public class Map : MonoBehaviour
             }
             //return new Vector3(base1.x -  0.5f*SIZEY, base1.y, base1.z + i * SIZE);
             //Debug.Log(base1.z + (i - 1) * SIZE + 0.5f * SIZEBig);
-            return new Vector3(-4.5f * SIZE, base1.y, base1.z + (i-1) * SIZE + 0.5f*SIZEBig +0.5f*SIZE);
+            return new Vector3(-4.5f * SIZE, base1.y, base1.z + (i - 1) * SIZE + 0.5f * SIZEBig + 0.5f * SIZE);
             Debug.Log(base1.z + (i - 1) * SIZE + 0.5f * SIZEBig);
         }
         else if (i < 16)
@@ -230,7 +410,7 @@ public class Map : MonoBehaviour
             {
                 return new Vector3(-3.5f * SIZE - 0.5f * SIZEBig, base2.y, 3.5f * SIZE + 0.5f * SIZEBig);
             }
-           
+
             return new Vector3(base2.x + ((i % 8) - 1) * SIZE + 0.5f * SIZEBig + 0.5f * SIZE, base2.y, 4.5f * SIZE);
         }
         else if (i < 24)
@@ -240,8 +420,8 @@ public class Map : MonoBehaviour
                 return new Vector3(3.5f * SIZE + 0.5f * SIZEBig, base3.y, 3.5f * SIZE + 0.5f * SIZEBig);
             }
             var a = base3.z - ((i % 8) - 1) * SIZE - 0.5f * SIZEBig - 0.5f * SIZE;
-            Debug.Log(a);
-            Debug.Log("base 3" + base3);
+            //  Debug.Log(a);
+            //  Debug.Log("base 3" + base3);
             return new Vector3(4.5f * SIZE, base3.y, a);
         }
         else
@@ -250,7 +430,7 @@ public class Map : MonoBehaviour
             {
                 return new Vector3(3.5f * SIZE + 0.5f * SIZEBig, base4.y, -3.5f * SIZE - 0.5f * SIZEBig);
             }
-            return new Vector3(base4.x - ((i % 8)-1) * SIZE - 0.5f * SIZEBig - 0.5f * SIZE, base4.y, -4.5f * SIZE);
+            return new Vector3(base4.x - ((i % 8) - 1) * SIZE - 0.5f * SIZEBig - 0.5f * SIZE, base4.y, -4.5f * SIZE);
         }
     }
 
@@ -269,14 +449,17 @@ public class Map : MonoBehaviour
         else if (pos == 8)
         {
             DealPrison.active = true;
+            GameController.instance.PrisonWait3Turn();
         }
         else if (pos == 16)
         {
             DealWorldCup.active = true;
+            ShowWorldCup();
         }
         else if (pos == 24)
         {
             DealTravel.active = true;
+            ShowTravel();
         }
         else if (pos == 4 || pos == 9 || pos == 14 || pos == 18 || pos == 25)
         {
@@ -292,7 +475,7 @@ public class Map : MonoBehaviour
         }
         else
         {
-            if(Ar_BuidingModel[pos].Level == 3)
+            if (Ar_BuidingModel[pos].Level == 3)
             {
                 DealWonders.active = true;
             }
@@ -304,6 +487,8 @@ public class Map : MonoBehaviour
         #endregion
 
     }
+
+
 
     public void hideDeal(int pos)
     {
@@ -324,7 +509,8 @@ public class Map : MonoBehaviour
         }
         else if (pos == 16)
         {
-            DealWorldCup.active = false;
+            //DealWorldCup.active = false;
+            // ShowWorldCup();
         }
         else if (pos == 24)
         {
@@ -344,7 +530,7 @@ public class Map : MonoBehaviour
         }
         else
         {
-            if (Ar_BuidingModel[pos].Level == 3)
+            if (Ar_BuidingModel[pos].Level == 4)
             {
                 DealWonders.active = false;
             }
@@ -354,6 +540,174 @@ public class Map : MonoBehaviour
             }
         }
         #endregion
+
+    }
+
+    private void ShowWorldCup()
+    {
+
+    }
+    private void ShowTravel()
+    {
+        Travel = -1;
+        StartCoroutine(Didulich());
+    }
+    IEnumerator Didulich()
+    {
+        yield return new WaitWhile(() => Travel < 0);
+        var newpos = 0;
+        newpos = Travel - GameController.instance.meModel.Position;
+        if (newpos > 0)
+        {
+            GameController.instance.meModel.Move(newpos);
+        }
+        else
+        {
+            newpos = 32 - GameController.instance.meModel.Position + Travel;
+            GameController.instance.meModel.Move(Travel);
+        }
+        
+        GameInfoModel.mDatabaseRef.Child("Game").Child(GameInfoModel.IdGame).Child("player").Child(GameController.instance.meModel.Uid).Child("Travel").SetValueAsync(newpos);
+        Travel = -2;
+    }
+    //public void ShowWorldCup()
+    //{
+    //    if (Input.GetMouseButtonDown(0))
+    //    {
+    //        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+    //        RaycastHit hit;
+    //        foreach (var item in Ar_BuidingModel)
+    //        {
+    //        if (Physics.Raycast(ray, out hit, 100))
+    //        {
+    //            // whatever tag you are looking for on your game object
+    //            if (hit.collider.name == item.Position.ToString())
+    //            {
+    //                Debug.Log("---> Hit: " + item.Position);
+    //            }
+    //        }
+
+    //        }
+    //    }
+    //}
+
+    void HandleValueChanged(object sender, ValueChangedEventArgs args)
+    {
+
+        if (args.DatabaseError != null)
+        {
+            Debug.LogError(args.DatabaseError.Message);
+            return;
+        }
+        DataSnapshot snapshot = args.Snapshot;
+        // neeus ddung turn thi moi gan du lieu
+        for (int i = 0; i < 32; i++)
+        {
+            // Debug.Log("i = " + i);
+            if (i == int.Parse(snapshot.Key))
+            {
+                int oldLevel = Ar_BuidingModel[i].Level;
+                Debug.Log("int.Parse(snapshot.Key) = " + int.Parse(snapshot.Key));
+
+                Ar_BuidingModel[i].Fees = float.Parse(snapshot.Child("Fees").Value.ToString());
+                Ar_BuidingModel[i].Level = int.Parse(snapshot.Child("Level").Value.ToString());
+                Ar_BuidingModel[i].Position = int.Parse(snapshot.Child("Position").Value.ToString());
+                if (snapshot.Child("Owner").Value.ToString() == "RED")
+                {
+                    Debug.Log("owner = RED");
+                    Ar_BuidingModel[i].Owner = EPlayer.RED;
+                }
+                else if (snapshot.Child("Owner").Value.ToString() == "BLUE")
+                {
+                    Debug.Log("owner = BLUE");
+                    Ar_BuidingModel[i].Owner = EPlayer.BLUE;
+                }
+                else if (snapshot.Child("Owner").Value.ToString() == "YELLOW")
+                {
+                    Debug.Log("owner = YELLOW");
+                    Ar_BuidingModel[i].Owner = EPlayer.YELLOW;
+                }
+                else
+                {
+                    Debug.Log("owner = GREEN");
+                    Ar_BuidingModel[i].Owner = EPlayer.GREEN;
+                }
+                if (Ar_BuidingModel[i].Level == 1)
+                {
+                    Debug.Log("xay nha 1");
+                    InitBuilding1(i, Ar_BuidingModel[i].Owner.ToString());
+                }
+                else if (Ar_BuidingModel[i].Level == 2)
+                {
+                    Debug.Log("xay nha 2");
+                    if (oldLevel == 0)
+                    {
+                        InitBuilding1(i, Ar_BuidingModel[i].Owner.ToString());
+                        InitBuilding2(i, Ar_BuidingModel[i].Owner.ToString());
+                    }
+                    else
+                    {
+                        InitBuilding2(i, Ar_BuidingModel[i].Owner.ToString());
+                    }
+                }
+                else if (Ar_BuidingModel[i].Level == 3)
+                {
+                    if (oldLevel == 0)
+                    {
+                        InitBuilding1(i, Ar_BuidingModel[i].Owner.ToString());
+                        InitBuilding2(i, Ar_BuidingModel[i].Owner.ToString());
+                        InitBuilding3(i, Ar_BuidingModel[i].Owner.ToString());
+                    }
+                    else if (oldLevel == 1)
+                    {
+                        InitBuilding2(i, Ar_BuidingModel[i].Owner.ToString());
+                        InitBuilding3(i, Ar_BuidingModel[i].Owner.ToString());
+                    }
+                    else
+                    {
+                        InitBuilding3(i, Ar_BuidingModel[i].Owner.ToString());
+                    }
+                    Debug.Log("xay nha 3");
+                }
+                else
+                {
+                    deleteBuilding(i);
+                    Debug.Log("xay nha ki quan");
+                    InitWonders(i, Ar_BuidingModel[i].Owner.ToString());
+                }
+            }
+
+        }  
+    }
+
+
+    void HandleTravelChange(object sender, ValueChangedEventArgs args)
+    {
+        if (args.DatabaseError != null)
+        {
+            Debug.LogError(args.DatabaseError.Message);
+            return;
+        }
+        DataSnapshot snapshot = args.Snapshot;
+        foreach (var player in snapshot.Children)
+        {
+            Debug.Log("player khi lay ve " + player.Child("Travel").Value.ToString());
+            if (int.Parse(player.Child("Travel").Value.ToString()) != 0 )
+            {
+                for (int i = 0; i < GameInfoModel.playerCount - 1;i++)
+                {
+                    if (player.Child("Uid").Value.ToString() == GameController.instance.playerModels[i].Uid.ToString())
+                    {
+                        GameController.instance.playerModels[i].Move(int.Parse(player.Child("Travel").Value.ToString()));
+                        Debug.Log("player.Child().Value.ToString() " + player.Child("Uid").Value.ToString());
+                    }
+                    Debug.Log("player.Child().Value.ToString() " + player.Child("Uid").Value.ToString());
+                    Debug.Log("gctl player " + GameController.instance.playerModels[i].Uid.ToString());
+
+                }
+            }
+            
+        }
 
     }
 }
