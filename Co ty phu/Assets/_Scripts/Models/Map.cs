@@ -564,7 +564,7 @@ public class Map : MonoBehaviour
         else
         {
             newpos = 32 - GameController.instance.meModel.Position + Travel;
-            GameController.instance.meModel.Move(Travel);
+            GameController.instance.meModel.Move(newpos);
         }
         
         GameInfoModel.mDatabaseRef.Child("Game").Child(GameInfoModel.IdGame).Child("player").Child(GameController.instance.meModel.Uid).Child("Travel").SetValueAsync(newpos);
