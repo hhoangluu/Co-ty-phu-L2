@@ -29,6 +29,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2361.7559, y: 4056.374, z: 1355.7256}
   m_Center: {x: -0.0052490183, y: 0.05334476, z: 0.027465826}
+--- !u!114 &5673776905055806211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4225062194852497502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f06bd95f73604945a73c41696f0e9f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5297221314041532759
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -39,7 +51,7 @@ PrefabInstance:
     - target: {fileID: -927199367670048503, guid: 157fa6fc6113cc44cbd821237340fdfd,
         type: 3}
       propertyPath: m_Name
-      value: 23-Red-ALucy Variant
+      value: 23-Blue
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 157fa6fc6113cc44cbd821237340fdfd,
         type: 3}
@@ -111,6 +123,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.0011
       objectReference: {fileID: 0}
+    - target: {fileID: -1504981713932161579, guid: 157fa6fc6113cc44cbd821237340fdfd,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 550e430a1f7e3234686b8e0b02595628, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 157fa6fc6113cc44cbd821237340fdfd, type: 3}
 --- !u!1 &4225062194852497502 stripped

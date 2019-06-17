@@ -29,6 +29,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 270.6219, y: 525.6711, z: 284.27188}
   m_Center: {x: 3.4124374, y: 237.16444, z: -23.887217}
+--- !u!114 &2481065770726978765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5149473347327959358}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f06bd95f73604945a73c41696f0e9f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3771614808627771447
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -39,7 +51,7 @@ PrefabInstance:
     - target: {fileID: -927199367670048503, guid: 419eaa81c761f0c4f985e636d9f4d770,
         type: 3}
       propertyPath: m_Name
-      value: 22-Red-PisaTower Variant
+      value: 22-Blue
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 419eaa81c761f0c4f985e636d9f4d770,
         type: 3}
@@ -126,6 +138,11 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -6
       objectReference: {fileID: 0}
+    - target: {fileID: -2629486751761019018, guid: 419eaa81c761f0c4f985e636d9f4d770,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 550e430a1f7e3234686b8e0b02595628, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 419eaa81c761f0c4f985e636d9f4d770, type: 3}
 --- !u!1 &5149473347327959358 stripped

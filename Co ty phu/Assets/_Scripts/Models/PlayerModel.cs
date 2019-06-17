@@ -24,14 +24,16 @@ public class PlayerModel : MonoBehaviour
     public int Position { get => _position; set => _position = value; }
     public bool IsMove { get => _isMove; set => _isMove = value; }
     public EPlayer Player { get => _player; set => _player = value; }
-    public int Travel { get; private set; }
+    public int Travel { get; set; }
 
     public string Uid;
+    public string username;
 
 
     public void Init()
     {
         Uid = LoginModel.userID;
+        username = LoginModel.username;
         _isMove = false;
         _position = 0;
         _player = EPlayer.RED;
@@ -152,8 +154,8 @@ public class PlayerModel : MonoBehaviour
                    }
                }
            });
-         GameInfoModel.mDatabaseRef.Child(GameInfoModel.IdGame).Child("playercount")
-      .ValueChanged += HandleValueChanged;
+      //   GameInfoModel.mDatabaseRef.Child(GameInfoModel.IdGame).Child("playercount")
+      //.ValueChanged += HandleValueChanged;
     }
     
 
@@ -213,7 +215,8 @@ public class PlayerModel : MonoBehaviour
         info.Money = _money;
         info.Position = _position;
         info.Countdown = Countdown;
-        info.Travel = Travel;
+        // info.Travel = Travel;
+        info.username = username;
         GameInfoModel.mDatabaseRef.Child("Game").Child(GameInfoModel.IdGame).Child("player").Child(Uid).SetRawJsonValueAsync(JsonUtility.ToJson(info));
     }
 
@@ -231,6 +234,8 @@ public class PlayerModel : MonoBehaviour
         _money = float.Parse(snapshot.Child("Money").Value.ToString());
         _position = int.Parse(snapshot.Child("Position").Value.ToString());
         Countdown = int.Parse(snapshot.Child("Countdown").Value.ToString());
+        username = snapshot.Child("username").Value.ToString();
+
 
     }
 

@@ -39,7 +39,7 @@ PrefabInstance:
     - target: {fileID: -927199367670048503, guid: aed5f7406d49581419d77a344c277658,
         type: 3}
       propertyPath: m_Name
-      value: 17-Red-Phoenix-Throne-Korea Variant
+      value: 17-Blue
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: aed5f7406d49581419d77a344c277658,
         type: 3}
@@ -111,6 +111,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.006
       objectReference: {fileID: 0}
+    - target: {fileID: -9198923754800457173, guid: aed5f7406d49581419d77a344c277658,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 550e430a1f7e3234686b8e0b02595628, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aed5f7406d49581419d77a344c277658, type: 3}
 --- !u!1 &4463006831088330696 stripped

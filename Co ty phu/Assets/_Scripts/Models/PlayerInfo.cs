@@ -12,6 +12,7 @@ public class PlayerInfo
     public string Uid;
     public int Countdown;
     public int Travel;
+    public string username;
 
     public PlayerInfo()
     {

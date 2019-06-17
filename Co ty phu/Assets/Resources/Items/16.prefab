@@ -39,7 +39,7 @@ PrefabInstance:
     - target: {fileID: -927199367670048503, guid: 5de3845e684470c418f2519a7a83cb9c,
         type: 3}
       propertyPath: m_Name
-      value: 16-WorldCup Variant
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 5de3845e684470c418f2519a7a83cb9c,
         type: 3}

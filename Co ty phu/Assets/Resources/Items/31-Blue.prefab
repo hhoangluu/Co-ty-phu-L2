@@ -29,6 +29,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 24.929062, y: 34.6904, z: 12.551985}
   m_Center: {x: -3.2537675, y: 17.13015, z: 0.79749084}
+--- !u!114 &8186539866075568399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6609480437463922708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f06bd95f73604945a73c41696f0e9f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2925222536866259229
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -115,7 +127,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: a0bb9ae74c99c16429e24f42cdb94529, type: 2}
+      objectReference: {fileID: 2100000, guid: 550e430a1f7e3234686b8e0b02595628, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 60df370f801330b448ab68f97b3d88c6, type: 3}
 --- !u!1 &6609480437463922708 stripped

@@ -29,6 +29,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 12672.558, y: 14446.619, z: 33543.125}
   m_Center: {x: 39.688744, y: 936.129, z: 16721.639}
+--- !u!114 &3879326789780140089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1706829706196801377}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f06bd95f73604945a73c41696f0e9f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7245743717380689512
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -39,7 +51,7 @@ PrefabInstance:
     - target: {fileID: -927199367670048503, guid: 9752378c1262a9b41aa805205b7291d5,
         type: 3}
       propertyPath: m_Name
-      value: 3-Eiffel-Blue Variant
+      value: 3-Blue
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 9752378c1262a9b41aa805205b7291d5,
         type: 3}
@@ -131,6 +143,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1.0201
       objectReference: {fileID: 0}
+    - target: {fileID: -4173317830803025437, guid: 9752378c1262a9b41aa805205b7291d5,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 550e430a1f7e3234686b8e0b02595628, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9752378c1262a9b41aa805205b7291d5, type: 3}
 --- !u!1 &1706829706196801377 stripped

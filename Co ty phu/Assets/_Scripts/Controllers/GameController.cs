@@ -122,7 +122,7 @@ public class GameController : MonoBehaviour
 
 
     [ContextMenu("Next Turn")]
-    void NextTurn()
+    public void NextTurn()
     {
         diceModel.EndTurn();
         switch (turn)
@@ -160,6 +160,7 @@ public class GameController : MonoBehaviour
         //   playerModel.GetComponent<Animator>().enabled = false;
         subtractMoney(meModel.Position);
         Deal();
+        meModel.Travel = 0;
         meModel.Push();
         for(int i=0; i< GameInfoModel.playerCount-2; i++)
         {
@@ -260,7 +261,7 @@ public class GameController : MonoBehaviour
                 Map.Current.Ar_BuidingModel[meModel.Position].Level = 2;
                 meModel.Money -= Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f * 1.5f;
                 meModel.Push();
-                Map.Current.Ar_BuidingModel[meModel.Position].Fees = Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f;
+                Map.Current.Ar_BuidingModel[meModel.Position].Fees *= 1.5f;
                 Map.Current.pushBuilding(meModel.Position);
                 Map.Current.Ar_BuidingModel[meModel.Position].Level = 1;
             }
@@ -308,8 +309,8 @@ public class GameController : MonoBehaviour
                 Map.Current.Ar_BuidingModel[meModel.Position].Level = 3;
                 meModel.Money -= Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f * 1.5f;
                 meModel.Money -= Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f * 1.5f * 1.5f;
-                meModel.Push();               
-                Map.Current.Ar_BuidingModel[meModel.Position].Fees = Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f * 1.5f;
+                meModel.Push();
+                Map.Current.Ar_BuidingModel[meModel.Position].Fees *= 1.5f ;
                 Map.Current.pushBuilding(meModel.Position);
                 Map.Current.Ar_BuidingModel[meModel.Position].Level = 1;
             }
@@ -317,7 +318,7 @@ public class GameController : MonoBehaviour
             {
                 Map.Current.Ar_BuidingModel[meModel.Position].Level = 3;
                 meModel.Money -= Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f * 1.5f * 1.5f;
-                Map.Current.Ar_BuidingModel[meModel.Position].Fees = Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f * 1.5f;
+                Map.Current.Ar_BuidingModel[meModel.Position].Fees *= 1.5f;
                 Map.Current.pushBuilding(meModel.Position);
                 Map.Current.Ar_BuidingModel[meModel.Position].Level = 2;
             }
@@ -354,6 +355,7 @@ public class GameController : MonoBehaviour
             meModel.Money -= Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f * 1.5f * 1.5f *1.5f;
             meModel.Push();
             Map.Current.Ar_BuidingModel[meModel.Position].Level = 4;
+            Map.Current.Ar_BuidingModel[meModel.Position].Fees *= 1.5f;
             Debug.Log("playerModel.Position: " + meModel.Position + " kq");
         }
         Map.Current.pushBuilding(meModel.Position);
@@ -476,7 +478,7 @@ public class GameController : MonoBehaviour
             Debug.Log("Khoi tao thanh cong player 2");
             meModel.Init();
             meModel.Player = EPlayer.RED;
-
+            Map.Current.info1.active = true;
         }
         else if (count == 2)
         {
@@ -484,6 +486,7 @@ public class GameController : MonoBehaviour
             meModel = Me.GetComponent<PlayerModel>();
             meModel.Init();
             meModel.Player = EPlayer.BLUE;
+            Map.Current.info2.active = true;
         }
         else if (count == 3)
         {
@@ -516,6 +519,7 @@ public class GameController : MonoBehaviour
             playerModels[0] = playerO[0].GetComponent<PlayerModel>();
             playerModels[0].Init();
             playerModels[0].Player = EPlayer.RED;
+            Map.Current.info1.active = true;
         }
         else if (count == 3)
         {
@@ -544,6 +548,7 @@ public class GameController : MonoBehaviour
             playerModels[2].Player = EPlayer.GREEN;
         }
         meModel.GetAllPlayer();
+      
     }
     IEnumerator InitPlayerFromDB()
     {

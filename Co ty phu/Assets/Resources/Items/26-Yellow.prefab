@@ -41,7 +41,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f06bd95f73604945a73c41696f0e9f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _player: 0
 --- !u!1001 &6250014940367911642
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -52,7 +51,7 @@ PrefabInstance:
     - target: {fileID: -927199367670048503, guid: 11d5f96940dc9664f90ffcb01ead33bb,
         type: 3}
       propertyPath: m_Name
-      value: 26
+      value: 26-Yellow
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 11d5f96940dc9664f90ffcb01ead33bb,
         type: 3}
@@ -129,6 +128,21 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 1.5
       objectReference: {fileID: 0}
+    - target: {fileID: -2416733968201007103, guid: 11d5f96940dc9664f90ffcb01ead33bb,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ca080e9d06ff1e3419ddac14b5a971b1, type: 2}
+    - target: {fileID: 5563002288286601950, guid: 11d5f96940dc9664f90ffcb01ead33bb,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ca080e9d06ff1e3419ddac14b5a971b1, type: 2}
+    - target: {fileID: -8531787065537435973, guid: 11d5f96940dc9664f90ffcb01ead33bb,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ca080e9d06ff1e3419ddac14b5a971b1, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 11d5f96940dc9664f90ffcb01ead33bb, type: 3}
 --- !u!1 &2710443973893956563 stripped

@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Map : MonoBehaviour
 {
@@ -22,6 +23,8 @@ public class Map : MonoBehaviour
     public GameObject DealThue;
     public GameObject DealStart;
     public GameObject ThongBao;
+    public GameObject info1;
+    public GameObject info2;
 
     public Building[] Ar_BuidingModel;
 
@@ -81,14 +84,16 @@ public class Map : MonoBehaviour
 
     void Awake()
     {
+
         Current = this;
         Current.items = new List<BaseItem>();
         Current.Ar_BuidingModel = new Building[32];
         Travel = -2;
-        var refs = FirebaseDatabase.DefaultInstance
-            .GetReference("Game").Child(GameInfoModel.IdGame).Child("player");
+        WorldCup = -2;
+      //  var refs = FirebaseDatabase.DefaultInstance
+          //  .GetReference("Game").Child(GameInfoModel.IdGame).Child("player");
 
-        refs.ValueChanged += HandleTravelChange;
+      //  refs.ValueChanged += HandleTravelChange;
        
       
         float jump = 100;
@@ -114,7 +119,7 @@ public class Map : MonoBehaviour
             }
             else if (i == 16)
             {
-                Current.Ar_BuidingModel[i].Cityname = "WORLD CUOP";
+                Current.Ar_BuidingModel[i].Cityname = "WORLD CUP";
             }
             else if (i == 24)
             {
@@ -242,6 +247,9 @@ public class Map : MonoBehaviour
         get { return _plots; }
 
     }
+
+    public int WorldCup { get; set; }
+
     [ContextMenu("check")]
     public void Check()
     {
@@ -332,7 +340,7 @@ public class Map : MonoBehaviour
             //  c.GetComponent<Collider>().tag = "Plot";
             _plots[i] = c.GetComponentInChildren<Plot>();
             _plots[i].name = "plot " + i;
-
+           // _plots[i].transform.GetChild(2).GetChild(0).GetComponent<Text>().text = Ar_BuidingModel[i].Cityname;
             // set color for plot
             if (i == 1 || i == 3)
             {
@@ -453,7 +461,7 @@ public class Map : MonoBehaviour
         }
         else if (pos == 16)
         {
-            DealWorldCup.active = true;
+          //  DealWorldCup.active = true;
             ShowWorldCup();
         }
         else if (pos == 24)
@@ -498,6 +506,7 @@ public class Map : MonoBehaviour
         if (pos == 0)
         {
             DealStart.active = false;
+            ShowWorldCup();
         }
         else if (pos == 2)
         {
@@ -545,30 +554,23 @@ public class Map : MonoBehaviour
 
     private void ShowWorldCup()
     {
-
+        GameController.instance.NextTurn();
+     //   WorldCup = -1;
+     //   StartCoroutine(NhanDoi());
     }
     private void ShowTravel()
     {
-        Travel = -1;
-        StartCoroutine(Didulich());
+        GameController.instance.PrisonWait3Turn();
+       // Travel = -1;
+       // StartCoroutine(Didulich());
     }
-    IEnumerator Didulich()
+    IEnumerator NhanDoi()
     {
-        yield return new WaitWhile(() => Travel < 0);
-        var newpos = 0;
-        newpos = Travel - GameController.instance.meModel.Position;
-        if (newpos > 0)
-        {
-            GameController.instance.meModel.Move(newpos);
-        }
-        else
-        {
-            newpos = 32 - GameController.instance.meModel.Position + Travel;
-            GameController.instance.meModel.Move(newpos);
-        }
-        
-        GameInfoModel.mDatabaseRef.Child("Game").Child(GameInfoModel.IdGame).Child("player").Child(GameController.instance.meModel.Uid).Child("Travel").SetValueAsync(newpos);
-        Travel = -2;
+        yield return new WaitWhile(() => WorldCup < 0);
+
+        Ar_BuidingModel[WorldCup].Fees *= 2;
+        pushBuilding(WorldCup);
+        WorldCup = -2;
     }
     //public void ShowWorldCup()
     //{
@@ -696,10 +698,14 @@ public class Map : MonoBehaviour
             {
                 for (int i = 0; i < GameInfoModel.playerCount - 1;i++)
                 {
-                    if (player.Child("Uid").Value.ToString() == GameController.instance.playerModels[i].Uid.ToString())
+                    if (player.Child("Uid").Value.ToString() != LoginModel.userID)
                     {
-                        GameController.instance.playerModels[i].Move(int.Parse(player.Child("Travel").Value.ToString()));
-                        Debug.Log("player.Child().Value.ToString() " + player.Child("Uid").Value.ToString());
+                        if (player.Child("Uid").Value.ToString() == GameController.instance.playerModels[i].Uid.ToString())
+                        {
+                            GameController.instance.playerModels[i].Move(int.Parse(player.Child("Travel").Value.ToString()));
+                            Debug.Log("player.Child().Value.ToString() sau khi move" + player.Child("Uid").Value.ToString());
+                        }
+
                     }
                     Debug.Log("player.Child().Value.ToString() " + player.Child("Uid").Value.ToString());
                     Debug.Log("gctl player " + GameController.instance.playerModels[i].Uid.ToString());

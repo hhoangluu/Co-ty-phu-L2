@@ -41,7 +41,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f06bd95f73604945a73c41696f0e9f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _player: 0
 --- !u!1001 &8236058960823362672
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -52,7 +51,7 @@ PrefabInstance:
     - target: {fileID: -927199367670048503, guid: efa910b865c9c11498695e68dd584c95,
         type: 3}
       propertyPath: m_Name
-      value: 27-Red-Bridges
+      value: 27-Yellow
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: efa910b865c9c11498695e68dd584c95,
         type: 3}
@@ -129,6 +128,31 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6065128432613763093, guid: efa910b865c9c11498695e68dd584c95,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ca080e9d06ff1e3419ddac14b5a971b1, type: 2}
+    - target: {fileID: 6444777763475162493, guid: efa910b865c9c11498695e68dd584c95,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ca080e9d06ff1e3419ddac14b5a971b1, type: 2}
+    - target: {fileID: 1362155462836044513, guid: efa910b865c9c11498695e68dd584c95,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ca080e9d06ff1e3419ddac14b5a971b1, type: 2}
+    - target: {fileID: 7979541321377405590, guid: efa910b865c9c11498695e68dd584c95,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ca080e9d06ff1e3419ddac14b5a971b1, type: 2}
+    - target: {fileID: -2835692184298365154, guid: efa910b865c9c11498695e68dd584c95,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ca080e9d06ff1e3419ddac14b5a971b1, type: 2}
     m_RemovedComponents:
     - {fileID: -7521214134985992077, guid: efa910b865c9c11498695e68dd584c95, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: efa910b865c9c11498695e68dd584c95, type: 3}

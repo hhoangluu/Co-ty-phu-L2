@@ -59,13 +59,22 @@ public class Plot : MonoBehaviour
     }
     void OnMouseOver()
     {
-        if (Map.Current.Travel == -1)
+        //if (Map.Current.Travel == -1)
+        //{
+        //    if (Input.GetMouseButtonDown(0))
+        //    {
+        //        Debug.Log("Da click vao" + transform.name);
+        //        Map.Current.Travel = int.Parse(transform.name);
+        //    }
+        //}
+        if (Map.Current.WorldCup == -1)
         {
             if (Input.GetMouseButtonDown(0))
-            {
-                Debug.Log("Da click vao" + transform.name);
-                Map.Current.Travel = int.Parse(transform.name);
-            }
+         {
+              Debug.Log("Da click vao" + transform.name);
+              Map.Current.WorldCup = int.Parse(transform.name);
+           }
+
         }
     }
     [ContextMenu("ChangePlotColor")]

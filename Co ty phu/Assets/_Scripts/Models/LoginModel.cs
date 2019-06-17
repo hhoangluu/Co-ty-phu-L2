@@ -14,6 +14,7 @@ public class LoginModel : MonoBehaviour
     private bool isauth;
 
     public static string userID;
+    public static string username;
     public string localId { get; private set; }
 
     public void SignInUserButton()
@@ -56,6 +57,8 @@ public class LoginModel : MonoBehaviour
             Debug.LogFormat("User signed in successfully: {0} ({1})",
                 newUser.DisplayName, newUser.UserId);
             userID = newUser.UserId;
+            username = newUser.Email;
+
          //   PlayerModel.Uid = newUser.UserId;
             isauth = true;
         });

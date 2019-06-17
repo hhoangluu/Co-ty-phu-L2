@@ -39,7 +39,7 @@ PrefabInstance:
     - target: {fileID: -927199367670048503, guid: a1fbe76e3c9961447adbecdac009493e,
         type: 3}
       propertyPath: m_Name
-      value: 8-Desert-Island Variant
+      value: 8-Blue
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: a1fbe76e3c9961447adbecdac009493e,
         type: 3}
