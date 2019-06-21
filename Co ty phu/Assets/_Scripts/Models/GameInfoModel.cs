@@ -21,7 +21,7 @@ public class GameInfoModel
     {
 
         playerCount = 0;
-       
+
 
         Turn = "RED";
         diceInfo = new DiceInfo();
@@ -31,10 +31,10 @@ public class GameInfoModel
 
         // Get the root reference location of the database.
         mDatabaseRef = FirebaseDatabase.DefaultInstance.RootReference;
-        
+
 
     }
-    
+
 
     public string ToJson()
     {
@@ -46,7 +46,7 @@ public class GameInfoModel
 
     public void GetCount()
     {
-        
+
 
         string count = "";
         FirebaseDatabase.DefaultInstance.GetReference("Game").Child(IdGame).Child("playercount").GetValueAsync()
@@ -64,11 +64,11 @@ public class GameInfoModel
                     count = snapshot.Value.ToString();
                     playerCount = int.Parse(count.ToString());
                     playerCount++;
-                    Debug.Log("DAy la playercount"+ playerCount);
+                    Debug.Log("DAy la playercount" + playerCount);
                     isGetCountDone = true;
                     GameInfoModel.mDatabaseRef.Child("Game").Child(GameInfoModel.IdGame).Child("playercount").SetValueAsync(GameInfoModel.playerCount.ToString());
                     Debug.Log("Day la player count day len" + GameInfoModel.playerCount);
-                   
+
                     FirebaseDatabase.DefaultInstance
      .GetReference("Game").Child(IdGame).Child("playercount")
       .ValueChanged += HandleValueChanged;
@@ -95,13 +95,12 @@ public class GameInfoModel
         if (playerCount == int.Parse(count))
             return;
         playerCount = int.Parse(count.ToString());
-        
+
         Debug.Log("Day la count khi thay doi db " + playerCount);
         GameObject p = null;
         PlayerModel pModel = null;
         if (playerCount == 0)
         {
-
             p = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Players/PlayerRed")) as GameObject;
             Debug.Log("Khoi tao thanh cong player 1");
             pModel = p.GetComponent<PlayerModel>();

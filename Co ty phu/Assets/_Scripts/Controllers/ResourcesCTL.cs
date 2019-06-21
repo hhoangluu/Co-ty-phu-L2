@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ResourcesCTL 
+public class ResourcesCTL
 {
     private static ResourcesCTL _instance = null;
     public static ResourcesCTL Instance
@@ -41,7 +41,7 @@ public class ResourcesCTL
             return _greenPlotMaterial;
         }
     }
-    
+
     private Material _bluePlotMaterial;
     public Material BluePlotMaterial
     {

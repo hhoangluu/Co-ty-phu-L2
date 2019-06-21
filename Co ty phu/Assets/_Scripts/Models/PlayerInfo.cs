@@ -11,14 +11,11 @@ public class PlayerInfo
     public string color;
     public string Uid;
     public int Countdown;
-    public int Travel;
     public string username;
-
     public PlayerInfo()
     {
         Uid = LoginModel.userID;
         Position = 0;
-        Travel = 0;
     }
 
 }

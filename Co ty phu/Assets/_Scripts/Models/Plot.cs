@@ -18,7 +18,7 @@ public class Plot : MonoBehaviour
                     GetComponent<Renderer>().material = ResourcesCTL.Instance.WhitePlotMaterial;
                     break;
                 case EPlotColor.VIOLET:
-                    GetComponent< Renderer> ().material = ResourcesCTL.Instance.VioletPlotMaterial;
+                    GetComponent<Renderer>().material = ResourcesCTL.Instance.VioletPlotMaterial;
                     break;
                 case EPlotColor.GREEN:
                     GetComponent<Renderer>().material = ResourcesCTL.Instance.GreenPlotMaterial;
@@ -57,26 +57,6 @@ public class Plot : MonoBehaviour
             }
         }
     }
-    void OnMouseOver()
-    {
-        //if (Map.Current.Travel == -1)
-        //{
-        //    if (Input.GetMouseButtonDown(0))
-        //    {
-        //        Debug.Log("Da click vao" + transform.name);
-        //        Map.Current.Travel = int.Parse(transform.name);
-        //    }
-        //}
-        if (Map.Current.WorldCup == -1)
-        {
-            if (Input.GetMouseButtonDown(0))
-         {
-              Debug.Log("Da click vao" + transform.name);
-              Map.Current.WorldCup = int.Parse(transform.name);
-           }
-
-        }
-    }
     [ContextMenu("ChangePlotColor")]
     public void SetColor()
     {
@@ -86,7 +66,7 @@ public class Plot : MonoBehaviour
     {
         get
         {
-          return  GetComponent<Renderer>().bounds.size.x;
+            return GetComponent<Renderer>().bounds.size.x;
         }
     }
     public float SIZEBig

@@ -27,7 +27,7 @@ public class Building : BaseItem
         Fees = 0;
         Price = 0; ;
         Cityname = "NoName";
-        Owner = EPlayer.RED;
+        Owner = EPlayer.WHILE;
         Position = pos;
     }
 }

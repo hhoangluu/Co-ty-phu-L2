@@ -10,7 +10,7 @@ public class PlayerModel : MonoBehaviour
 
     private EPlayer _player;
 
-    private float _money;
+    public float _money;
 
     private int _card;
 
@@ -24,12 +24,137 @@ public class PlayerModel : MonoBehaviour
     public int Position { get => _position; set => _position = value; }
     public bool IsMove { get => _isMove; set => _isMove = value; }
     public EPlayer Player { get => _player; set => _player = value; }
-    public int Travel { get; set; }
-
-    public string Uid;
     public string username;
 
+    public string Uid;
 
+    public bool checkDoubleColor(int x, int y)
+    {
+        if (Map.Current.Ar_BuidingModel[x].Owner == Player && Map.Current.Ar_BuidingModel[y].Owner == Player)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public bool check3DoubleColor()
+    {
+
+        int dem = 0;
+        if (checkDoubleColor(1, 3))
+        {
+            dem++;
+        }
+        if (checkDoubleColor(10, 11))
+        {
+            dem++;
+        }
+        if (checkDoubleColor(13, 15))
+        {
+            dem++;
+        }
+        if (checkDoubleColor(17, 19))
+        {
+            dem++;
+        }
+        if (checkDoubleColor(26, 27))
+        {
+            dem++;
+        }
+        if (checkDoubleColor(29, 31))
+        {
+            dem++;
+        }
+        if (dem >=3)
+        {
+            Debug.Log("mau " + Player.ToString() + "hoan thanh 3 cap mau");
+            return true;
+        }
+        return false;
+    }
+
+    public bool check6Island()
+    {
+        int dem = 0;
+        for (int i = 0; i < 32; i++)
+        {
+            if ((Map.Current.Ar_BuidingModel[i].Owner == Player && i == 2)
+                || (Map.Current.Ar_BuidingModel[i].Owner == Player && i == 4)
+                || (Map.Current.Ar_BuidingModel[i].Owner == Player && i == 9)
+                || (Map.Current.Ar_BuidingModel[i].Owner == Player && i == 12)
+                || (Map.Current.Ar_BuidingModel[i].Owner == Player && i == 14)
+                || (Map.Current.Ar_BuidingModel[i].Owner == Player && i == 18)
+                || (Map.Current.Ar_BuidingModel[i].Owner == Player && i == 20)
+                || (Map.Current.Ar_BuidingModel[i].Owner == Player && i == 25)
+                || (Map.Current.Ar_BuidingModel[i].Owner == Player && i == 28)
+                || (Map.Current.Ar_BuidingModel[i].Owner == Player && i == 30)
+                )
+            {
+                dem++;
+            }
+            if (dem == 6)
+            {
+                Debug.Log("mau " + Player.ToString() + "hoan thanh 6 dao");
+                return true;
+            }
+        }
+        return false;
+    }
+    public bool check3PlayerBankrupt()
+    {
+        for (int i = 0; i < GameInfoModel.playerCount - 1; i++)
+        {
+            if (!GameController.instance.playerModels[i].checkBankrupt())
+            {
+                return false;
+            }
+        }
+        if (GameInfoModel.playerCount == 1)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    public bool checkBankrupt()
+    {
+        if (Money <= 0)
+        {
+            for (int i = 0; i < 32; i++)
+            {
+                if (Map.Current.Ar_BuidingModel[i].Owner == Player)
+                {
+                    for (int j = 0; j < Map.Current.Ar_BuidingModel[i].Level; j++)
+                    {
+                        Money += Map.Current.Ar_BuidingModel[i].Price * 1.5f;
+                    }
+                }
+                if (Money > 0)
+                {
+                    return false;
+                }
+            }
+            Debug.Log("mau " + Player.ToString() + "pha san");
+            Debug.Log("money = " + Money);
+            return true;
+        }
+        return false;
+        
+    }
+
+    public bool checkWin()
+    {
+        if (check6Island() || check3PlayerBankrupt() || check3DoubleColor())
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public PlayerModel()
+    {
+        Money = 50000;
+    }
     public void Init()
     {
         Uid = LoginModel.userID;
@@ -37,12 +162,11 @@ public class PlayerModel : MonoBehaviour
         _isMove = false;
         _position = 0;
         _player = EPlayer.RED;
-        Money = 2000;
+        Money = 50000;
         _card = 0;
         Countdown = 0;
-        GameInfoModel.mDatabaseRef.Child("Game").Child(GameInfoModel.IdGame).Child("player").Child(Uid)
+        GameInfoModel.mDatabaseRef.Child(GameInfoModel.IdGame).Child("player").Child(Uid)
       .ValueChanged += HandlePlayerChange;
-
     }
 
     public void Move(int point)
@@ -128,36 +252,36 @@ public class PlayerModel : MonoBehaviour
     public void GetAllPlayer()
     {
         GameInfoModel.mDatabaseRef.Child("Game").Child(GameInfoModel.IdGame).Child("player").GetValueAsync()
-           .ContinueWith(task =>
+   .ContinueWith(task =>
+   {
+       if (task.IsFaulted)
+       {
+           Debug.Log("Errrrrrrrrrrrr");
+       }
+       else if (task.IsCompleted)
+       {
+           int count = GameInfoModel.playerCount - 1;
+           DataSnapshot snapshot = task.Result;
+           Debug.Log("playercount Get all" + snapshot.ChildrenCount);
+           foreach (var item in snapshot.Children)
            {
-               if (task.IsFaulted)
+               Debug.Log("item.key.to string" + item.Key.ToString() + "count" + count);
+               if (item.Key.ToString() != LoginModel.userID)
                {
-                   Debug.Log("Errrrrrrrrrrrr");
-               }
-               else if (task.IsCompleted)
-               {
-                   int count = GameInfoModel.playerCount - 1;
-                   DataSnapshot snapshot = task.Result;
-                   Debug.Log("playercount Get all" + snapshot.ChildrenCount);
-                   foreach (var item in snapshot.Children)
-                   {
-                       Debug.Log("item.key.to string" + item.Key.ToString()+ "count" + count);
-                       if (item.Key.ToString() != LoginModel.userID)
-                       {
-                       GameController.instance.playerModels[count].Uid =  item.Key.ToString();
-                       
-                       Debug.Log("item.key.to string" +item.Key.ToString());
+                   GameController.instance.playerModels[count].Uid = item.Key.ToString();
 
-                       }
-                       count--;
-                      
-                   }
+                   Debug.Log("item.key.to string" + item.Key.ToString());
+
                }
-           });
-      //   GameInfoModel.mDatabaseRef.Child(GameInfoModel.IdGame).Child("playercount")
-      //.ValueChanged += HandleValueChanged;
+               count--;
+
+           }
+       }
+   });
+        // GameInfoModel.mDatabaseRef.Child(GameInfoModel.IdGame).Child("playercount")
+        //  .ValueChanged += HandleValueChanged;
     }
-    
+
 
     void HandleValueChanged(object sender, ValueChangedEventArgs args)
     {
@@ -167,7 +291,7 @@ public class PlayerModel : MonoBehaviour
             Debug.LogError(args.DatabaseError.Message);
             return;
         }
-        
+
         DataSnapshot snapshot = args.Snapshot;
 
         count = int.Parse(snapshot.Value.ToString());
@@ -212,17 +336,17 @@ public class PlayerModel : MonoBehaviour
     {
         PlayerInfo info = new PlayerInfo();
         info.Uid = Uid;
-        info.Money = _money;
+        info.Money = Money;
         info.Position = _position;
+        info.color = Player.ToString();
         info.Countdown = Countdown;
-        // info.Travel = Travel;
         info.username = username;
         GameInfoModel.mDatabaseRef.Child("Game").Child(GameInfoModel.IdGame).Child("player").Child(Uid).SetRawJsonValueAsync(JsonUtility.ToJson(info));
     }
 
     void HandlePlayerChange(object sender, ValueChangedEventArgs args)
     {
-        
+
         if (args.DatabaseError != null)
         {
             Debug.LogError(args.DatabaseError.Message);
@@ -231,12 +355,28 @@ public class PlayerModel : MonoBehaviour
 
         DataSnapshot snapshot = args.Snapshot;
         Uid = snapshot.Child("Uid").Value.ToString();
-        _money = float.Parse(snapshot.Child("Money").Value.ToString());
-        _position = int.Parse(snapshot.Child("Position").Value.ToString());
+        Money = float.Parse(snapshot.Child("Money").Value.ToString());
+        Position = int.Parse(snapshot.Child("Position").Value.ToString());
         Countdown = int.Parse(snapshot.Child("Countdown").Value.ToString());
         username = snapshot.Child("username").Value.ToString();
+        if (snapshot.Child("color").Value.ToString() == "RED")
+        {
+            Player = EPlayer.RED;
+        }
+        else if (snapshot.Child("color").Value.ToString() == "BLUE")
+        {
+            Player = EPlayer.BLUE;
 
+        }
+        else if (snapshot.Child("color").Value.ToString() == "GREEN")
+        {
 
+            Player = EPlayer.GREEN;
+        }
+        else
+        {
+            Player = EPlayer.YELLOW;
+        }
     }
 
 }

@@ -33,20 +33,20 @@ public class SingleDice : MonoBehaviour
     public bool IsPourDone()
     {
         if (rb.IsSleeping() && hasLanded && pour)
-        { 
+        {
             return true;
         }
-     //   Debug.Log(name + " " + rb.IsSleeping() + " " + hasLanded + " " + pour);
+        //   Debug.Log(name + " " + rb.IsSleeping() + " " + hasLanded + " " + pour);
         return false;
     }
 
     // Update is called once per frame
     public void CheckPoint()
     {
-      //  Debug.Log(name + "  " + rb.IsSleeping());
+        //  Debug.Log(name + "  " + rb.IsSleeping());
         if (rb.IsSleeping() && !hasLanded && pour)
         {
-            
+
             hasLanded = true;
             rb.useGravity = false;
             rb.isKinematic = true;
@@ -71,14 +71,14 @@ public class SingleDice : MonoBehaviour
 
         //    }
         //}
-       
+
 
 
     }
 
     public Vector3 PourDiceAgain()
     {
-        
+
         float x = Random.Range(0, 360);
         float y = Random.Range(0, 360);
         float z = Random.Range(0, 360);
@@ -90,15 +90,15 @@ public class SingleDice : MonoBehaviour
 
     public void PourDice(Vector3 vt3)
     {
-        
+
         StartCoroutine(Play());
         Reset();
         transform.Rotate(vt3);
-        Debug.Log("rotaion trc khi bay: " + vt3.x + " y: " + vt3.y + " z: " + vt3.z); 
+        Debug.Log("rotaion trc khi bay: " + vt3.x + " y: " + vt3.y + " z: " + vt3.z);
         if (!pour && !hasLanded)
         {
             ms.enabled = true;
-           // rb.WakeUp();
+            // rb.WakeUp();
             pour = true;
             rb.useGravity = true;
             rb.AddTorque(100000, 100000, 100000);
@@ -129,10 +129,10 @@ public class SingleDice : MonoBehaviour
 
             if (side.OnGound)
             {
-                
+
                 Point = side.SideValue;
                 // pour = false;
-                
+
                 // Debug.Log(Point);
             }
         }

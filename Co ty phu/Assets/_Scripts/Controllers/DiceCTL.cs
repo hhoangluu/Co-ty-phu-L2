@@ -13,7 +13,7 @@ public class DiceCTL : MonoBehaviour
     public void PourDice()
     {
         diceModel.PourDice();
-      
+
     }
     private void Update()
     {

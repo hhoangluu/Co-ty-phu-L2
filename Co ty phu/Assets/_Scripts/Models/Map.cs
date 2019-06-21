@@ -3,7 +3,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Map : MonoBehaviour
 {
@@ -22,16 +21,13 @@ public class Map : MonoBehaviour
     public GameObject DealHonDao;
     public GameObject DealThue;
     public GameObject DealStart;
-    public GameObject ThongBao;
-    public GameObject info1;
-    public GameObject info2;
 
     public Building[] Ar_BuidingModel;
 
     //public Building[] Ar_BuidingModel;
 
 
-    public int Travel;
+
     public List<BaseItem> items;
 
 
@@ -40,7 +36,7 @@ public class Map : MonoBehaviour
         BuildingInfo temp = new BuildingInfo();
         temp.Level = Ar_BuidingModel[pos].Level;
         temp.Fees = Ar_BuidingModel[pos].Fees;
-        temp.Owner = Ar_BuidingModel[pos].Player.ToString();
+        temp.Owner = Ar_BuidingModel[pos].Owner.ToString();
         temp.Position = pos;
 
         GameInfoModel.mDatabaseRef.Child("Game").Child(GameInfoModel.IdGame).Child("Buildings").Child(pos.ToString()).SetRawJsonValueAsync(JsonUtility.ToJson(temp));
@@ -84,18 +80,9 @@ public class Map : MonoBehaviour
 
     void Awake()
     {
-
         Current = this;
         Current.items = new List<BaseItem>();
         Current.Ar_BuidingModel = new Building[32];
-        Travel = -2;
-        WorldCup = -2;
-      //  var refs = FirebaseDatabase.DefaultInstance
-          //  .GetReference("Game").Child(GameInfoModel.IdGame).Child("player");
-
-      //  refs.ValueChanged += HandleTravelChange;
-       
-      
         float jump = 100;
         float org = 1000;
         for (int i = 0; i < 32; i++)
@@ -119,7 +106,7 @@ public class Map : MonoBehaviour
             }
             else if (i == 16)
             {
-                Current.Ar_BuidingModel[i].Cityname = "WORLD CUP";
+                Current.Ar_BuidingModel[i].Cityname = "WORLD CUOP";
             }
             else if (i == 24)
             {
@@ -247,9 +234,6 @@ public class Map : MonoBehaviour
         get { return _plots; }
 
     }
-
-    public int WorldCup { get; set; }
-
     [ContextMenu("check")]
     public void Check()
     {
@@ -260,7 +244,7 @@ public class Map : MonoBehaviour
     public void InitBuilding1(int id, string color)
     {
         //items = new List<BaseItem>();
-        GameObject Building1 = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Items/Building1-Red")) as GameObject;
+        GameObject Building1 = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Items/Building1-" + color)) as GameObject;
         Building1.transform.parent = this.transform.GetChild(1);
         Building1.name = id.ToString();
         Building b1 = Building1.GetComponent<Building>();
@@ -276,7 +260,6 @@ public class Map : MonoBehaviour
             Building = transform.GetChild(1).GetChild(i).gameObject;
             if (Building.name == id.ToString())
             {
-
                 Destroy(Building);
             }
         }
@@ -284,7 +267,7 @@ public class Map : MonoBehaviour
     public void InitBuilding2(int id, string color)
     {
 
-        GameObject Building2 = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Items/Building2-Red")) as GameObject;
+        GameObject Building2 = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Items/Building2-" + color)) as GameObject;
         Building2.transform.parent = this.transform.GetChild(1);
         Building2.name = id.ToString();
         Building b2 = Building2.GetComponent<Building>();
@@ -294,7 +277,7 @@ public class Map : MonoBehaviour
     public void InitBuilding3(int id, string color)
     {
         //items = new List<BaseItem>();
-        GameObject Building3 = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Items/Building3-Red")) as GameObject;
+        GameObject Building3 = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Items/Building3-" + color)) as GameObject;
         Building3.transform.parent = this.transform.GetChild(1);
         Building3.name = id.ToString();
         Building b3 = Building3.GetComponent<Building>();
@@ -340,7 +323,7 @@ public class Map : MonoBehaviour
             //  c.GetComponent<Collider>().tag = "Plot";
             _plots[i] = c.GetComponentInChildren<Plot>();
             _plots[i].name = "plot " + i;
-           // _plots[i].transform.GetChild(2).GetChild(0).GetComponent<Text>().text = Ar_BuidingModel[i].Cityname;
+
             // set color for plot
             if (i == 1 || i == 3)
             {
@@ -449,6 +432,7 @@ public class Map : MonoBehaviour
         if (pos == 0)
         {
             DealStart.active = true;
+            ShowWorldCup();
         }
         else if (pos == 2)
         {
@@ -461,13 +445,13 @@ public class Map : MonoBehaviour
         }
         else if (pos == 16)
         {
-          //  DealWorldCup.active = true;
+            DealWorldCup.active = true;
             ShowWorldCup();
         }
         else if (pos == 24)
         {
             DealTravel.active = true;
-            ShowTravel();
+            GameController.instance.PrisonWait3Turn();
         }
         else if (pos == 4 || pos == 9 || pos == 14 || pos == 18 || pos == 25)
         {
@@ -487,7 +471,7 @@ public class Map : MonoBehaviour
             {
                 DealWonders.active = true;
             }
-            else
+            else if (Ar_BuidingModel[pos].Level < 3)
             {
                 Deal.active = true;
             }
@@ -495,8 +479,6 @@ public class Map : MonoBehaviour
         #endregion
 
     }
-
-
 
     public void hideDeal(int pos)
     {
@@ -506,7 +488,6 @@ public class Map : MonoBehaviour
         if (pos == 0)
         {
             DealStart.active = false;
-            ShowWorldCup();
         }
         else if (pos == 2)
         {
@@ -518,8 +499,7 @@ public class Map : MonoBehaviour
         }
         else if (pos == 16)
         {
-            //DealWorldCup.active = false;
-            // ShowWorldCup();
+            DealWorldCup.active = false;
         }
         else if (pos == 24)
         {
@@ -543,7 +523,7 @@ public class Map : MonoBehaviour
             {
                 DealWonders.active = false;
             }
-            else
+            else if (Ar_BuidingModel[pos].Level < 4)
             {
                 Deal.active = false;
             }
@@ -555,44 +535,15 @@ public class Map : MonoBehaviour
     private void ShowWorldCup()
     {
         GameController.instance.NextTurn();
-     //   WorldCup = -1;
-     //   StartCoroutine(NhanDoi());
+        //   WorldCup = -1;
+        //   StartCoroutine(NhanDoi());
     }
     private void ShowTravel()
     {
         GameController.instance.PrisonWait3Turn();
-       // Travel = -1;
-       // StartCoroutine(Didulich());
+        // Travel = -1;
+        // StartCoroutine(Didulich());
     }
-    IEnumerator NhanDoi()
-    {
-        yield return new WaitWhile(() => WorldCup < 0);
-
-        Ar_BuidingModel[WorldCup].Fees *= 2;
-        pushBuilding(WorldCup);
-        WorldCup = -2;
-    }
-    //public void ShowWorldCup()
-    //{
-    //    if (Input.GetMouseButtonDown(0))
-    //    {
-    //        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-    //        RaycastHit hit;
-    //        foreach (var item in Ar_BuidingModel)
-    //        {
-    //        if (Physics.Raycast(ray, out hit, 100))
-    //        {
-    //            // whatever tag you are looking for on your game object
-    //            if (hit.collider.name == item.Position.ToString())
-    //            {
-    //                Debug.Log("---> Hit: " + item.Position);
-    //            }
-    //        }
-
-    //        }
-    //    }
-    //}
-
     void HandleValueChanged(object sender, ValueChangedEventArgs args)
     {
 
@@ -605,7 +556,7 @@ public class Map : MonoBehaviour
         // neeus ddung turn thi moi gan du lieu
         for (int i = 0; i < 32; i++)
         {
-            // Debug.Log("i = " + i);
+            //Debug.Log("i = " + i);
             if (i == int.Parse(snapshot.Key))
             {
                 int oldLevel = Ar_BuidingModel[i].Level;
@@ -634,86 +585,83 @@ public class Map : MonoBehaviour
                     Debug.Log("owner = GREEN");
                     Ar_BuidingModel[i].Owner = EPlayer.GREEN;
                 }
-                if (Ar_BuidingModel[i].Level == 1)
+
+                if (i == 4 || i == 9 || i == 14 || i == 18 || i == 25)  //hòn đảo
                 {
-                    Debug.Log("xay nha 1");
-                    InitBuilding1(i, Ar_BuidingModel[i].Owner.ToString());
-                }
-                else if (Ar_BuidingModel[i].Level == 2)
-                {
-                    Debug.Log("xay nha 2");
-                    if (oldLevel == 0)
+                    if (Ar_BuidingModel[i].Level == 0)
                     {
+                        deleteBuilding(i);
+                    }
+                    else if (Ar_BuidingModel[i].Level == 1)
+                    {
+                        Debug.Log("xay hon dao 1");
                         InitBuilding1(i, Ar_BuidingModel[i].Owner.ToString());
-                        InitBuilding2(i, Ar_BuidingModel[i].Owner.ToString());
                     }
                     else
                     {
-                        InitBuilding2(i, Ar_BuidingModel[i].Owner.ToString());
+                        deleteBuilding(i);
+                        Debug.Log("xay hon dao 2");
+                        InitWonders(i, Ar_BuidingModel[i].Owner.ToString());
                     }
-                }
-                else if (Ar_BuidingModel[i].Level == 3)
-                {
-                    if (oldLevel == 0)
-                    {
-                        InitBuilding1(i, Ar_BuidingModel[i].Owner.ToString());
-                        InitBuilding2(i, Ar_BuidingModel[i].Owner.ToString());
-                        InitBuilding3(i, Ar_BuidingModel[i].Owner.ToString());
-                    }
-                    else if (oldLevel == 1)
-                    {
-                        InitBuilding2(i, Ar_BuidingModel[i].Owner.ToString());
-                        InitBuilding3(i, Ar_BuidingModel[i].Owner.ToString());
-                    }
-                    else
-                    {
-                        InitBuilding3(i, Ar_BuidingModel[i].Owner.ToString());
-                    }
-                    Debug.Log("xay nha 3");
                 }
                 else
                 {
-                    deleteBuilding(i);
-                    Debug.Log("xay nha ki quan");
-                    InitWonders(i, Ar_BuidingModel[i].Owner.ToString());
-                }
-            }
-
-        }  
-    }
-
-
-    void HandleTravelChange(object sender, ValueChangedEventArgs args)
-    {
-        if (args.DatabaseError != null)
-        {
-            Debug.LogError(args.DatabaseError.Message);
-            return;
-        }
-        DataSnapshot snapshot = args.Snapshot;
-        foreach (var player in snapshot.Children)
-        {
-            Debug.Log("player khi lay ve " + player.Child("Travel").Value.ToString());
-            if (int.Parse(player.Child("Travel").Value.ToString()) != 0 )
-            {
-                for (int i = 0; i < GameInfoModel.playerCount - 1;i++)
-                {
-                    if (player.Child("Uid").Value.ToString() != LoginModel.userID)
+                    if (Ar_BuidingModel[i].Level == 0)
                     {
-                        if (player.Child("Uid").Value.ToString() == GameController.instance.playerModels[i].Uid.ToString())
-                        {
-                            GameController.instance.playerModels[i].Move(int.Parse(player.Child("Travel").Value.ToString()));
-                            Debug.Log("player.Child().Value.ToString() sau khi move" + player.Child("Uid").Value.ToString());
-                        }
-
+                        deleteBuilding(i);
                     }
-                    Debug.Log("player.Child().Value.ToString() " + player.Child("Uid").Value.ToString());
-                    Debug.Log("gctl player " + GameController.instance.playerModels[i].Uid.ToString());
-
+                    else if (Ar_BuidingModel[i].Level == 1)
+                    {
+                        Debug.Log("xay nha 1");
+                        InitBuilding1(i, Ar_BuidingModel[i].Owner.ToString());
+                    }
+                    else if (Ar_BuidingModel[i].Level == 2)
+                    {
+                        Debug.Log("xay nha 2");
+                        if (oldLevel == 0)
+                        {
+                            InitBuilding1(i, Ar_BuidingModel[i].Owner.ToString());
+                            InitBuilding2(i, Ar_BuidingModel[i].Owner.ToString());
+                        }
+                        else
+                        {
+                            InitBuilding2(i, Ar_BuidingModel[i].Owner.ToString());
+                        }
+                    }
+                    else if (Ar_BuidingModel[i].Level == 3)
+                    {
+                        if (oldLevel == 0)
+                        {
+                            InitBuilding1(i, Ar_BuidingModel[i].Owner.ToString());
+                            InitBuilding2(i, Ar_BuidingModel[i].Owner.ToString());
+                            InitBuilding3(i, Ar_BuidingModel[i].Owner.ToString());
+                        }
+                        else if (oldLevel == 1)
+                        {
+                            InitBuilding2(i, Ar_BuidingModel[i].Owner.ToString());
+                            InitBuilding3(i, Ar_BuidingModel[i].Owner.ToString());
+                        }
+                        else
+                        {
+                            InitBuilding3(i, Ar_BuidingModel[i].Owner.ToString());
+                        }
+                        Debug.Log("xay nha 3");
+                    }
+                    else
+                    {
+                        deleteBuilding(i);
+                        Debug.Log("xay nha ki quan");
+                        InitWonders(i, Ar_BuidingModel[i].Owner.ToString());
+                    }
                 }
+
+
+
             }
-            
+
         }
+
+
 
     }
 }

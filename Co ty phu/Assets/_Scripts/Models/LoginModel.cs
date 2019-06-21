@@ -19,7 +19,7 @@ public class LoginModel : MonoBehaviour
 
     public void SignInUserButton()
     {
-       
+
         SignInUser(emailText.text, passwordText.text);
     }
     private void SignInUser(string email, string password)
@@ -39,7 +39,8 @@ public class LoginModel : MonoBehaviour
         //        Debug.Log(error);
         //    });
         auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
-        auth.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(task => {
+        auth.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(task =>
+        {
             if (task.IsCanceled)
             {
                 Debug.LogError("SignInWithEmailAndPasswordAsync was canceled.");
@@ -58,8 +59,7 @@ public class LoginModel : MonoBehaviour
                 newUser.DisplayName, newUser.UserId);
             userID = newUser.UserId;
             username = newUser.Email;
-
-         //   PlayerModel.Uid = newUser.UserId;
+            //   PlayerModel.Uid = newUser.UserId;
             isauth = true;
         });
     }
@@ -69,8 +69,8 @@ public class LoginModel : MonoBehaviour
     }
     private void Update()
     {
-      if (isauth) SceneManager.LoadScene(2);
-        
+        if (isauth) SceneManager.LoadScene(2);
+
     }
 
 }

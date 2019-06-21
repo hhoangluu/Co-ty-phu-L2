@@ -13,21 +13,21 @@ public class LobbyModel : MonoBehaviour
     public GameObject Loading;
     private GameInfoModel info;
     private List<RoomInfo> rooms = new List<RoomInfo>();
-    
+
     private bool IsLoadDone;
-    
+
     // Start is called before the first frame update
     void Start()
     {
         //GameObject c = GameObject.Instantiate(room, CanculatePosition(1), Quaternion.identity) as GameObject;
-        info = new GameInfoModel() ;
-      //  info.Turn = 1;
+        info = new GameInfoModel();
+        //  info.Turn = 1;
         Debug.Log("Khoi tao info" + info);
-        
+
         GetAllRoom();
         StartCoroutine(RenderRoom());
 
-        
+
     }
 
     public void writeNewGame()
@@ -36,16 +36,16 @@ public class LobbyModel : MonoBehaviour
         string json = JsonUtility.ToJson(info);
         Debug.Log(json);
 
-       var a =  GameInfoModel.mDatabaseRef.Child("Game").Push();
+        var a = GameInfoModel.mDatabaseRef.Child("Game").Push();
         GameInfoModel.IdGame = a.Key;
         a.SetRawJsonValueAsync(json);
         json = "{\"id\":\"" + GameInfoModel.IdGame + "\"}";
         GameInfoModel.mDatabaseRef.Child("Rooms").Child(GameInfoModel.IdGame).SetRawJsonValueAsync(json);
-       
 
 
-        Debug.Log(GameInfoModel.IdGame+ " Day la id game");
-        
+
+        Debug.Log(GameInfoModel.IdGame + " Day la id game");
+
     }
 
     public void EnterRoom(int number)
@@ -63,7 +63,7 @@ public class LobbyModel : MonoBehaviour
         {
             Debug.Log("Phong day");
         }
-        
+
     }
 
     private Vector3 CanculatePosition(int i)
@@ -73,8 +73,8 @@ public class LobbyModel : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       
-        
+
+
     }
 
     private void GetAllRoom()
@@ -97,13 +97,13 @@ public class LobbyModel : MonoBehaviour
                         r.idGame = room.Key.ToString();
                         r.number = ++count;
                         rooms.Add(r);
-                       
+
                     }
                     IsLoadDone = true;
                 }
             });
 
-                                  //a.ContinueWith(task => {
+        //a.ContinueWith(task => {
         //    if (task.IsFaulted)
         //    {
         //        // Handle the error...
@@ -154,22 +154,22 @@ public class LobbyModel : MonoBehaviour
             Debug.Log(room.idGame);
             GameObject roomGO = GameObject.Instantiate(roomprefaps) as GameObject;
             roomGO.transform.parent = canvas.transform;
-         //   Debug.Log(roomGO.transform.position.x + "<-x  y->" + roomGO.transform.position.y);
-            roomGO.transform.position = new Vector3(roomGO.transform.position.x + 3* count, transform.position.y);
+            //   Debug.Log(roomGO.transform.position.x + "<-x  y->" + roomGO.transform.position.y);
+            roomGO.transform.position = new Vector3(roomGO.transform.position.x + 3 * count, transform.position.y);
         }
         canvas.active = true;
         Loading.active = false;
 
         //yield return new WaitWhile(() =>  info.isGetCountDone == false);
-        
+
         //    GameInfoModel.mDatabaseRef.Child("Game").Child(GameInfoModel.IdGame).Child("playercount").SetValueAsync(GameInfoModel.playerCount.ToString());
         //Debug.Log("Day la player count day len" + GameInfoModel.playerCount);
         //    info.isGetCountDone = false;
-        
+
     }
     bool isRenderDone()
     {
-       
+
         return true;
     }
 

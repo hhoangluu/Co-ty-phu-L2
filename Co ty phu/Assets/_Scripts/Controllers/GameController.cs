@@ -5,8 +5,8 @@ using UnityEngine;
 public class GameController : MonoBehaviour
 {
 
-    public static GameController instance = null;
-    public PlayerInfo playerinfo;
+  
+  //  public PlayerInfo playerinfo;
     public GameObject Dice;
 
     //public GameObject MapO;
@@ -15,15 +15,19 @@ public class GameController : MonoBehaviour
     public PlayerModel meModel;
 
     public PlayerModel[] playerModels;
-    public static GameObject Me;
+    public GameObject Me;
     public GameObject[] playerO;
     GameInfoModel gameinfo;
     public EPlayer turn;
     public PlayerInfo meinfo = new PlayerInfo();
     Firebase.Database.DatabaseReference Gamedbref;
 
-    public bool IsInitDone { get; private set; }
+    public GameObject winner;
 
+    public GameObject loser;
+
+    public bool IsInitDone { get; private set; }
+    public static GameController instance = null;
     private void Awake()
     {
         instance = this;
@@ -31,20 +35,20 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
-       // GameInfoModel.IdGame = "-Lh9QfqIZn_7EIoH2atL";
+        // GameInfoModel.IdGame = "-Lh9QfqIZn_7EIoH2atL";
         gameinfo = new GameInfoModel();
         Gamedbref = GameInfoModel.mDatabaseRef.Child("Game").Child(GameInfoModel.IdGame);
         playerModels = new PlayerModel[3];
         playerO = new GameObject[3];
-        
+
         StartCoroutine(InitPlayerFromDB());
-         
+
 
         diceModel = Dice.GetComponent<DiceModel>();
         //Map.Current = MapO.GetComponent<Map>();
 
         diceModel.Init();
-        //Map.Current.Init();
+        Map.Current.Init();
 
         turn = EPlayer.RED;
         //if (GameInfoModel.playerCount == 0)
@@ -57,8 +61,8 @@ public class GameController : MonoBehaviour
 
         string json = JsonUtility.ToJson(meinfo);
         //  Debug.Log(json);
-      //  json = "{\"" + meModel.Uid + "\":" + json + "}";
-       // Gamedbref.Child("Turn").SetValueAsync("RED");
+        //  json = "{\"" + meModel.Uid + "\":" + json + "}";
+        // Gamedbref.Child("Turn").SetValueAsync("RED");
         //Gamedbref.Child("Players").SetRawJsonValueAsync(json);
 
     }
@@ -66,15 +70,14 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       // Map.Current.ShowWorldCup();
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Debug.Log("Turn " + turn);
             diceModel.PourDice();
-           
+
 
         }
-        if (diceModel.IsPourDone() && !meModel.IsMove && meModel.Player == turn )
+        if (diceModel.IsPourDone() && !meModel.IsMove && meModel.Player == turn)
         {
             if (meModel.Countdown == 0)
             {
@@ -98,7 +101,7 @@ public class GameController : MonoBehaviour
                     playerModels[i].Move(diceModel.Point);
 
                 }
-                
+
 
                 //StartCoroutine(Play());
                 NextTurn();
@@ -118,8 +121,37 @@ public class GameController : MonoBehaviour
                 playerModels[i].PlayerUpdate();
             }
         }
+
+        win_Lose();
+
+
     }
 
+    public void win_Lose()
+    {
+        if (meModel.checkWin())
+        {
+            Debug.Log("Ban da chien thang");
+            winner.active = true;
+        }
+        if (meModel.checkBankrupt())
+        {
+            Debug.Log("Ban da pha san");
+            loser.active = true;
+        }
+        for (int i = 0; i < GameInfoModel.playerCount - 1; i++)
+        {
+            if (playerModels[i].checkBankrupt())
+            {
+                Debug.Log("Nguoi choi mau " + playerModels[i].Player.ToString() + "da bi pha san");
+            }
+            if (playerModels[i].checkWin())
+            {
+                Debug.Log("Nguoi choi mau " + playerModels[i].Player.ToString() + "da chien thang");
+            }
+        }
+
+    }
 
     [ContextMenu("Next Turn")]
     public void NextTurn()
@@ -131,7 +163,7 @@ public class GameController : MonoBehaviour
                 turn = EPlayer.BLUE;
                 break;
             case EPlayer.BLUE:
-                turn = EPlayer.RED;
+                turn = EPlayer.GREEN;
                 break;
             case EPlayer.GREEN:
                 turn = EPlayer.YELLOW;
@@ -151,7 +183,7 @@ public class GameController : MonoBehaviour
             Map.Current.ShowDeal(meModel.Position);
             NextTurn();
         }
-        
+
     }
 
     IEnumerator Play()
@@ -160,26 +192,21 @@ public class GameController : MonoBehaviour
         //   playerModel.GetComponent<Animator>().enabled = false;
         subtractMoney(meModel.Position);
         Deal();
-        meModel.Travel = 0;
         meModel.Push();
-        for(int i=0; i< GameInfoModel.playerCount-2; i++)
-        {
-            playerModels[i].Push();
-        }
+
     }
 
     public void subtractMoney(int pos)
     {
-        if(meModel.Player != Map.Current.Ar_BuidingModel[pos].Player)
+        if (meModel.Player != Map.Current.Ar_BuidingModel[pos].Player)
         {
             meModel.Money -= Map.Current.Ar_BuidingModel[pos].Fees;
-            for (int i=0; i < GameInfoModel.playerCount -2; i++)
+            for (int i = 0; i < GameInfoModel.playerCount - 1; i++)
             {
                 if (playerModels[i].Player == Map.Current.Ar_BuidingModel[pos].Player)
                 {
                     playerModels[i].Money += Map.Current.Ar_BuidingModel[pos].Fees;
-                    
-                    for (int j = 0; i < GameInfoModel.playerCount - 2; i++)
+                    for (int j = 0; j < GameInfoModel.playerCount - 1; j++)
                     {
                         playerModels[j].Push();
                     }
@@ -187,30 +214,14 @@ public class GameController : MonoBehaviour
             }
         }
     }
-
     public void BuyBuilding1()  //Nhà lv1
     {
         Debug.Log("Map.Current.Ar_BuidingModel[meModel.Position].level = " + Map.Current.Ar_BuidingModel[meModel.Position].Level);
-        if (Map.Current.Ar_BuidingModel[meModel.Position].Level == 0
-            && meModel.Position != 0
-            && meModel.Position != 2
-            && meModel.Position != 4
-            && meModel.Position != 8
-            && meModel.Position != 9
-            && meModel.Position != 12
-            && meModel.Position != 14
-            && meModel.Position != 16
-            && meModel.Position != 18
-            && meModel.Position != 20
-            && meModel.Position != 24
-            && meModel.Position != 25
-            && meModel.Position != 28
-            && meModel.Position != 30
-            )
+        if (Map.Current.Ar_BuidingModel[meModel.Position].Level == 0)
         {
             Debug.Log("playerModel.Position: " + meModel.Position + " lv1");
-            //Map.Current.InitBuilding1(meModel.Position, meModel.Player.ToString());
             Map.Current.Ar_BuidingModel[meModel.Position].Level = 1;
+            Map.Current.Ar_BuidingModel[meModel.Position].Owner = meModel.Player;
             Map.Current.Ar_BuidingModel[meModel.Position].Fees = Map.Current.Ar_BuidingModel[meModel.Position].Price * 0.5f;
             meModel.Money -= Map.Current.Ar_BuidingModel[meModel.Position].Price;
             meModel.Push();
@@ -221,47 +232,29 @@ public class GameController : MonoBehaviour
         Map.Current.Ar_BuidingModel[meModel.Position].Level = 0;
 
     }
-
     public void BuyBuilding2()  //Nhà lv2
     {
-        if (Map.Current.Ar_BuidingModel[meModel.Position].Level < 2
-            && meModel.Position != 0
-            && meModel.Position != 2
-            && meModel.Position != 4
-            && meModel.Position != 8
-            && meModel.Position != 9
-            && meModel.Position != 12
-            && meModel.Position != 14
-            && meModel.Position != 16
-            && meModel.Position != 18
-            && meModel.Position != 20
-            && meModel.Position != 24
-            && meModel.Position != 25
-            && meModel.Position != 28
-            && meModel.Position != 30
-            )
+        if (Map.Current.Ar_BuidingModel[meModel.Position].Level < 2)
         {
             if (Map.Current.Ar_BuidingModel[meModel.Position].Level == 0)
             {
-                //Map.Current.InitBuilding1(meModel.Position, meModel.Player.ToString());
-                //Map.Current.InitBuilding2(meModel.Position, meModel.Player.ToString());
                 Map.Current.Ar_BuidingModel[meModel.Position].Level = 2;
+                Map.Current.Ar_BuidingModel[meModel.Position].Owner = meModel.Player;
                 meModel.Money -= Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f;
                 meModel.Money -= Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f * 1.5f;
                 meModel.Push();
                 Map.Current.Ar_BuidingModel[meModel.Position].Fees = Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f;
-
                 Map.Current.pushBuilding(meModel.Position);
                 Map.Current.Ar_BuidingModel[meModel.Position].Level = 0;
 
             }
             else
             {
-                //Map.Current.InitBuilding2(meModel.Position, meModel.Player.ToString());
                 Map.Current.Ar_BuidingModel[meModel.Position].Level = 2;
+                Map.Current.Ar_BuidingModel[meModel.Position].Owner = meModel.Player;
                 meModel.Money -= Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f * 1.5f;
                 meModel.Push();
-                Map.Current.Ar_BuidingModel[meModel.Position].Fees *= 1.5f;
+                Map.Current.Ar_BuidingModel[meModel.Position].Fees = Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f;
                 Map.Current.pushBuilding(meModel.Position);
                 Map.Current.Ar_BuidingModel[meModel.Position].Level = 1;
             }
@@ -272,53 +265,40 @@ public class GameController : MonoBehaviour
         }
         Map.Current.hideDeal(meModel.Position);
     }
-
     public void BuyBuilding3()  //Nhà lv3
     {
-        if (Map.Current.Ar_BuidingModel[meModel.Position].Level < 3
-            && meModel.Position != 0
-            && meModel.Position != 2
-            && meModel.Position != 4
-            && meModel.Position != 8
-            && meModel.Position != 9
-            && meModel.Position != 12
-            && meModel.Position != 14
-            && meModel.Position != 16
-            && meModel.Position != 18
-            && meModel.Position != 20
-            && meModel.Position != 24
-            && meModel.Position != 25
-            && meModel.Position != 28
-            && meModel.Position != 30
-            )
+        if (Map.Current.Ar_BuidingModel[meModel.Position].Level < 3)
         {
             if (Map.Current.Ar_BuidingModel[meModel.Position].Level == 0)
             {
                 Map.Current.Ar_BuidingModel[meModel.Position].Level = 3;
+                Map.Current.Ar_BuidingModel[meModel.Position].Owner = meModel.Player;
                 meModel.Money -= Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f;
                 meModel.Money -= Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f * 1.5f;
                 meModel.Money -= Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f * 1.5f * 1.5f;
-
-                meModel.Push();               
+                meModel.Push();
                 Map.Current.Ar_BuidingModel[meModel.Position].Fees = Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f * 1.5f;
                 Map.Current.pushBuilding(meModel.Position);
                 Map.Current.Ar_BuidingModel[meModel.Position].Level = 0;
             }
-            else if(Map.Current.Ar_BuidingModel[meModel.Position].Level == 1)
+            else if (Map.Current.Ar_BuidingModel[meModel.Position].Level == 1)
             {
                 Map.Current.Ar_BuidingModel[meModel.Position].Level = 3;
+                Map.Current.Ar_BuidingModel[meModel.Position].Owner = meModel.Player;
                 meModel.Money -= Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f * 1.5f;
                 meModel.Money -= Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f * 1.5f * 1.5f;
                 meModel.Push();
-                Map.Current.Ar_BuidingModel[meModel.Position].Fees *= 1.5f ;
+                Map.Current.Ar_BuidingModel[meModel.Position].Fees = Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f * 1.5f;
                 Map.Current.pushBuilding(meModel.Position);
                 Map.Current.Ar_BuidingModel[meModel.Position].Level = 1;
             }
             else
             {
                 Map.Current.Ar_BuidingModel[meModel.Position].Level = 3;
+                Map.Current.Ar_BuidingModel[meModel.Position].Owner = meModel.Player;
                 meModel.Money -= Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f * 1.5f * 1.5f;
-                Map.Current.Ar_BuidingModel[meModel.Position].Fees *= 1.5f;
+                meModel.Push();
+                Map.Current.Ar_BuidingModel[meModel.Position].Fees = Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f * 1.5f;
                 Map.Current.pushBuilding(meModel.Position);
                 Map.Current.Ar_BuidingModel[meModel.Position].Level = 2;
             }
@@ -332,31 +312,17 @@ public class GameController : MonoBehaviour
     public void BuyWonders()    //Xây kì quan
     {
         Debug.Log("lol.................");
-        if (Map.Current.Ar_BuidingModel[meModel.Position].Level == 3
-            && meModel.Position != 0
-            && meModel.Position != 2
-            && meModel.Position != 4
-            && meModel.Position != 8
-            && meModel.Position != 9
-            && meModel.Position != 12
-            && meModel.Position != 14
-            && meModel.Position != 16
-            && meModel.Position != 18
-            && meModel.Position != 20
-            && meModel.Position != 24
-            && meModel.Position != 25
-            && meModel.Position != 28
-            && meModel.Position != 30
-            )
+        if (Map.Current.Ar_BuidingModel[meModel.Position].Level == 3)
         {
             //Hủy nhà 1 2 3
             //...............
             //
-            meModel.Money -= Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f * 1.5f * 1.5f *1.5f;
+            meModel.Money -= Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f * 1.5f * 1.5f * 1.5f;
+            Map.Current.Ar_BuidingModel[meModel.Position].Fees = Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f * 1.5f * 1.5f;
             meModel.Push();
             Map.Current.Ar_BuidingModel[meModel.Position].Level = 4;
-            Map.Current.Ar_BuidingModel[meModel.Position].Fees *= 1.5f;
-            Debug.Log("playerModel.Position: " + meModel.Position + " kq");
+            Map.Current.Ar_BuidingModel[meModel.Position].Owner = meModel.Player;
+            Debug.Log("color: " + Map.Current.Ar_BuidingModel[meModel.Position].Owner.ToString() + " kq");
         }
         Map.Current.pushBuilding(meModel.Position);
         Map.Current.hideDeal(meModel.Position);
@@ -377,12 +343,12 @@ public class GameController : MonoBehaviour
         {
 
             meModel.Countdown = 0;
-           
+
         }
         else if (meModel.Countdown != 0 && meModel.Player == turn)
         {
             meModel.Countdown--;
-           if (diceModel.IsDouble == true)
+            if (diceModel.IsDouble == true)
             {
                 meModel.Countdown = 0;
             }
@@ -402,8 +368,6 @@ public class GameController : MonoBehaviour
         Debug.Log("me model Countdown " + meModel.Countdown);
         Map.Current.hideDeal(meModel.Position);
     }
-
-
     public void WorldCup()    //WorldCup
     {
         if (meModel.Position == 16)
@@ -412,7 +376,6 @@ public class GameController : MonoBehaviour
         }
         Map.Current.hideDeal(meModel.Position);
     }
-   
     public void Travel()    //Du lịch
     {
         if (Map.Current.Ar_BuidingModel[meModel.Position].Level == 3
@@ -425,15 +388,20 @@ public class GameController : MonoBehaviour
     }
     public void HonDao()    //địa điểm du lịch
     {
-        if ((Map.Current.Ar_BuidingModel[meModel.Position].Level == 3 && meModel.Position == 4)
-            || (Map.Current.Ar_BuidingModel[meModel.Position].Level == 3 && meModel.Position == 9)
-            || (Map.Current.Ar_BuidingModel[meModel.Position].Level == 3 && meModel.Position == 14)
-            || (Map.Current.Ar_BuidingModel[meModel.Position].Level == 3 && meModel.Position == 18)
-            || (Map.Current.Ar_BuidingModel[meModel.Position].Level == 3 && meModel.Position == 25)
-            )
+        Debug.Log("lol.................");
+        if (Map.Current.Ar_BuidingModel[meModel.Position].Level == 1)
         {
-            //Map.Current.InitWonders(playerModel.Position, meModel.Player.ToString());
+            //Hủy nhà 1 2 3
+            //...............
+            //
+            meModel.Money -= Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f * 1.5f * 1.5f * 1.5f;
+            Map.Current.Ar_BuidingModel[meModel.Position].Fees = Map.Current.Ar_BuidingModel[meModel.Position].Price * 1.5f * 1.5f;
+            meModel.Push();
+            Map.Current.Ar_BuidingModel[meModel.Position].Level = 4;
+            Map.Current.Ar_BuidingModel[meModel.Position].Owner = meModel.Player;
+            Debug.Log("color: " + Map.Current.Ar_BuidingModel[meModel.Position].Owner.ToString() + " kq");
         }
+        Map.Current.pushBuilding(meModel.Position);
         Map.Current.hideDeal(meModel.Position);
     }
     public void Chance()    //Cơ hội
@@ -478,7 +446,7 @@ public class GameController : MonoBehaviour
             Debug.Log("Khoi tao thanh cong player 2");
             meModel.Init();
             meModel.Player = EPlayer.RED;
-            Map.Current.info1.active = true;
+
         }
         else if (count == 2)
         {
@@ -486,7 +454,6 @@ public class GameController : MonoBehaviour
             meModel = Me.GetComponent<PlayerModel>();
             meModel.Init();
             meModel.Player = EPlayer.BLUE;
-            Map.Current.info2.active = true;
         }
         else if (count == 3)
         {
@@ -502,15 +469,14 @@ public class GameController : MonoBehaviour
             meModel.Init();
             meModel.Player = EPlayer.YELLOW;
         }
-      //  meModel.Uid = "jPcRxegAFLNC7Yt1sDs8Vmg0SYM2";
+        //  meModel.Uid = "jPcRxegAFLNC7Yt1sDs8Vmg0SYM2";
         meinfo.Uid = meModel.Uid;
         Gamedbref.Child("player").Child(meinfo.Uid).SetRawJsonValueAsync(JsonUtility.ToJson(meinfo));
         IsInitDone = true;
+        meModel.Push();
     }
-
     private void InitPlayer()
     {
-       
         int count = GameInfoModel.playerCount;
         Debug.Log("So luong cac player khac " + count);
         if (count == 2)
@@ -519,7 +485,6 @@ public class GameController : MonoBehaviour
             playerModels[0] = playerO[0].GetComponent<PlayerModel>();
             playerModels[0].Init();
             playerModels[0].Player = EPlayer.RED;
-            Map.Current.info1.active = true;
         }
         else if (count == 3)
         {
@@ -547,16 +512,12 @@ public class GameController : MonoBehaviour
             playerModels[2].Init();
             playerModels[2].Player = EPlayer.GREEN;
         }
-        meModel.GetAllPlayer();
-      
     }
     IEnumerator InitPlayerFromDB()
     {
         yield return new WaitWhile(() => GameInfoModel.isGetCountDone == false);
-
         InitMe();
         InitPlayer();
-        
     }
 
 }

@@ -60,7 +60,7 @@ public class DiceModel : MonoBehaviour
 
     public void PourDiceOther(Vector3 vt3D1, Vector3 vt3D2)
     {
-       
+
         dice1.PourDice(vt3D1);
         dice2.PourDice(vt3D2);
     }
@@ -99,8 +99,8 @@ public class DiceModel : MonoBehaviour
         dice2.CheckPoint();
         if (dice1.IsPourDone() && dice2.IsPourDone())
         {
-            Point = dice1.Point + dice2.Point;
-            //Point = 16;//Điểm số của 2 xúc xắc
+            Point = dice1.Point + dice2.Point;          //Điểm số của 2 xúc xắc
+            //Point = 24;
             if (dice1.Point == dice2.Point)
             {
                 isDouble = true;
@@ -134,7 +134,7 @@ public class DiceModel : MonoBehaviour
         }
         DataSnapshot snapshot = args.Snapshot;
         // neeus ddung turn thi moi gan du lieu
-            Vector3 v1 = new Vector3();
+        Vector3 v1 = new Vector3();
         Vector3 v2 = new Vector3();
         v1.x = float.Parse(snapshot.Child("x1").Value.ToString());
         v1.y = float.Parse(snapshot.Child("y1").Value.ToString());
@@ -143,7 +143,7 @@ public class DiceModel : MonoBehaviour
         v2.x = float.Parse(snapshot.Child("x2").Value.ToString());
         v2.y = float.Parse(snapshot.Child("y2").Value.ToString());
         v2.z = float.Parse(snapshot.Child("z2").Value.ToString());
-        Debug.Log("Lay dice x: " + v1.x +" y: " +v1.y );
+        Debug.Log("Lay dice x: " + v1.x + " y: " + v1.y);
         PourDiceOther(v1, v2);
 
     }

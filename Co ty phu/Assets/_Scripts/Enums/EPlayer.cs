@@ -4,5 +4,5 @@ using UnityEngine;
 
 public enum EPlayer
 {
-   RED, BLUE, GREEN, YELLOW
+   RED, BLUE, GREEN, YELLOW, WHILE
 }
